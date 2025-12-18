@@ -464,6 +464,12 @@ abstract class FFITensor {
         CTensor Function(CTensor tensor)
       >('torchffi_tensor_exp');
 
+  static final abs = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_abs');
+
   static final norm = nativeLib
       .lookupFunction<
         CTensor Function(CTensor, CScalar, Pointer<Int64>, Size, Bool),
@@ -505,6 +511,46 @@ abstract class FFITensor {
         CTensor Function(CTensor, Pointer<Int64>, Bool),
         CTensor Function(CTensor tensor, Pointer<Int64> dim, bool keepdim)
       >('torchffi_tensor_argmax');
+
+  static final argmin = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor, Pointer<Int64>, Bool),
+        CTensor Function(CTensor tensor, Pointer<Int64> dim, bool keepdim)
+      >('torchffi_tensor_argmin');
+
+  static final max = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_max');
+
+  static final min = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_min');
+
+  static final amax = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor, Pointer<Int64>, Size, Bool),
+        CTensor Function(
+          CTensor tensor,
+          Pointer<Int64> dim,
+          int dimLength,
+          bool keepdim,
+        )
+      >('torchffi_tensor_amax');
+
+  static final amin = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor, Pointer<Int64>, Size, Bool),
+        CTensor Function(
+          CTensor tensor,
+          Pointer<Int64> dim,
+          int dimLength,
+          bool keepdim,
+        )
+      >('torchffi_tensor_amin');
 
   static final sum = nativeLib
       .lookupFunction<

@@ -1090,6 +1090,11 @@ class Tensor implements ffi.Finalizable {
     return Tensor(tensor);
   }
 
+  Tensor abs() {
+    final tensor = FFITensor.abs(nativePtr);
+    return Tensor(tensor);
+  }
+
   Tensor sin() {
     final tensor = FFITensor.sin(nativePtr);
     return Tensor(tensor);
@@ -1182,6 +1187,69 @@ class Tensor implements ffi.Finalizable {
         dimPtr.value = dim;
       }
       final tensor = FFITensor.argmax(nativePtr, dimPtr, keepDim);
+      return Tensor(tensor);
+    } finally {
+      arena.releaseAll();
+    }
+  }
+
+  Tensor argmin({int? dim, bool keepDim = false}) {
+    final arena = ffi.Arena();
+    try {
+      ffi.Pointer<ffi.Int64> dimPtr = ffi.nullptr;
+      if (dim != null) {
+        dimPtr = arena.allocate<ffi.Int64>(ffi.sizeOf<ffi.Int64>());
+        dimPtr.value = dim;
+      }
+      final tensor = FFITensor.argmin(nativePtr, dimPtr, keepDim);
+      return Tensor(tensor);
+    } finally {
+      arena.releaseAll();
+    }
+  }
+
+  Tensor max() {
+    final tensor = FFITensor.max(nativePtr);
+    return Tensor(tensor);
+  }
+
+  Tensor min() {
+    final tensor = FFITensor.min(nativePtr);
+    return Tensor(tensor);
+  }
+
+  Tensor amax({List<int>? dim, bool keepDim = false}) {
+    final arena = ffi.Arena();
+    try {
+      ffi.Pointer<ffi.Int64> dimPointer = ffi.nullptr;
+      int dimLen = 0;
+      if (dim != null) {
+        dimLen = dim.length;
+        dimPointer = arena.allocate<ffi.Int64>(
+          ffi.sizeOf<ffi.Int64>() * dim.length,
+        );
+        dimPointer.asTypedList(dim.length).setAll(0, dim);
+      }
+      final tensor = FFITensor.amax(nativePtr, dimPointer, dimLen, keepDim);
+      return Tensor(tensor);
+    } finally {
+      arena.releaseAll();
+    }
+  }
+
+  Tensor amin({List<int>? dim, bool keepDim = false}) {
+    final arena = ffi.Arena();
+    try {
+      ffi.Pointer<ffi.Int64> dimPointer = ffi.nullptr;
+      int dimLen = 0;
+      if (dim != null) {
+        dimLen = dim.length;
+        dimPointer = arena.allocate<ffi.Int64>(
+          ffi.sizeOf<ffi.Int64>() * dim.length,
+        );
+        dimPointer.asTypedList(dim.length).setAll(0, dim);
+      }
+      final tensor = FFITensor.amin(nativePtr, dimPointer, dimLen, keepDim);
       return Tensor(tensor);
     } finally {
       arena.releaseAll();

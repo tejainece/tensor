@@ -507,6 +507,11 @@ tensor torchffi_tensor_rsqrt(tensor input) {
   return new torch::Tensor(tensor);
 }
 
+tensor torchffi_tensor_abs(tensor input) {
+  at::Tensor tensor = torch::abs(*input);
+  return new torch::Tensor(tensor);
+}
+
 tensor torchffi_tensor_sin(tensor input) {
   at::Tensor tensor = torch::sin(*input);
   return new torch::Tensor(tensor);
@@ -563,6 +568,36 @@ tensor torchffi_tensor_argmax(tensor t, int64_t *dim, bool keepdim) {
     tensor = t->argmax(std::nullopt, keepdim);
   }
   return new torch::Tensor(tensor);
+}
+
+tensor torchffi_tensor_argmin(tensor t, int64_t *dim, bool keepdim) {
+  at::Tensor tensor;
+  if (dim != nullptr) {
+    tensor = t->argmin(*dim, keepdim);
+  } else {
+    tensor = t->argmin(std::nullopt, keepdim);
+  }
+  return new torch::Tensor(tensor);
+}
+
+tensor torchffi_tensor_max(tensor input) {
+  return new torch::Tensor(torch::max(*input));
+}
+
+tensor torchffi_tensor_min(tensor input) {
+  return new torch::Tensor(torch::min(*input));
+}
+
+tensor torchffi_tensor_amax(tensor input, int64_t *dim, size_t dimLength,
+                            bool keepdim) {
+  at::IntArrayRef opDim = at::IntArrayRef(dim, dimLength);
+  return new torch::Tensor(torch::amax(*input, opDim, keepdim));
+}
+
+tensor torchffi_tensor_amin(tensor input, int64_t *dim, size_t dimLength,
+                            bool keepdim) {
+  at::IntArrayRef opDim = at::IntArrayRef(dim, dimLength);
+  return new torch::Tensor(torch::amin(*input, opDim, keepdim));
 }
 
 tensor torchffi_tensor_sum(tensor input, int64_t *dim, size_t dimLength,

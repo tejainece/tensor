@@ -243,6 +243,18 @@ extern tensor torchffi_tensor_bmm(tensor input, tensor mat2);
 
 extern tensor torchffi_tensor_argmax(tensor t, int64_t *dim, bool keepdim);
 
+extern tensor torchffi_tensor_argmin(tensor t, int64_t *dim, bool keepdim);
+
+extern tensor torchffi_tensor_max(tensor input);
+
+extern tensor torchffi_tensor_min(tensor input);
+
+extern tensor torchffi_tensor_amax(tensor input, int64_t *dim, size_t dimLength,
+                                   bool keepdim);
+
+extern tensor torchffi_tensor_amin(tensor input, int64_t *dim, size_t dimLength,
+                                   bool keepdim);
+
 extern tensor torchffi_tensor_sum(tensor input, int64_t *dim, size_t dimLength,
                                   bool keepdim, uint8_t *dtype);
 
@@ -256,6 +268,8 @@ extern tensor torchffi_tensor_rsqrt(tensor input);
 extern tensor torchffi_tensor_sin(tensor input);
 
 extern tensor torchffi_tensor_cos(tensor input);
+
+extern tensor torchffi_tensor_abs(tensor input);
 
 extern tensor torchffi_tensor_exp(tensor input);
 
@@ -408,13 +422,10 @@ extern void torchffi_set_autocast_enabled(int8_t device, bool enabled);
 
 extern bool torchffi_is_autocast_enabled(int8_t device);
 
-extern tensor torchffi_scaled_dot_product_attention(tensor query, tensor key,
-                                                    tensor value,
-                                                    tensor attn_mask,
-                                                    double dropout_p,
-                                                    bool is_causal,
-                                                    double *scale);
-
+extern tensor
+torchffi_scaled_dot_product_attention(tensor query, tensor key, tensor value,
+                                      tensor attn_mask, double dropout_p,
+                                      bool is_causal, double *scale);
 
 #ifdef __cplusplus
 }
