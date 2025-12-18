@@ -96,6 +96,37 @@ abstract class NNUtil {
     FFINN.dropout_(input.nativePtr, p, training);
   }
 
+  static Tensor scaledDotProductAttention(
+    Tensor query,
+    Tensor key,
+    Tensor value, {
+    Tensor? attnMask,
+    double dropoutP = 0.0,
+    bool isCausal = false,
+    double? scale,
+  }) {
+    final arena = ffi.Arena();
+    try {
+      ffi.Pointer<ffi.Double> scalePtr = ffi.nullptr;
+      if (scale != null) {
+        scalePtr = arena.allocate<ffi.Double>(ffi.sizeOf<ffi.Double>())
+          ..value = scale;
+      }
+      final output = FFINN.scaledDotProductAttention(
+        query.nativePtr,
+        key.nativePtr,
+        value.nativePtr,
+        attnMask?.nativePtr ?? ffi.nullptr,
+        dropoutP,
+        isCausal,
+        scalePtr,
+      );
+      return Tensor(output);
+    } finally {
+      arena.releaseAll();
+    }
+  }
+
   static Tensor linear(Tensor input, Tensor weight, {Tensor? bias}) {
     final tensorPtr = FFINN.linear(
       input.nativePtr,

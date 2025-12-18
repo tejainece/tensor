@@ -959,6 +959,18 @@ tensor torchffi_tensor_where(tensor condition, Scalar input, Scalar other) {
   }
 }
 
+tensor torchffi_scaled_dot_product_attention(tensor query, tensor key,
+                                             tensor value, tensor attn_mask,
+                                             double dropout_p, bool is_causal,
+                                             double *scale) {
+  at::Tensor tensor = at::scaled_dot_product_attention(
+      *query, *key, *value,
+      (attn_mask ? std::optional<at::Tensor>(*attn_mask) : std::nullopt),
+      dropout_p, is_causal,
+      (scale ? std::optional<double>(*scale) : std::nullopt));
+  return new torch::Tensor(tensor);
+}
+
 #ifdef __cplusplus
 }
 #endif

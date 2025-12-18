@@ -803,6 +803,28 @@ abstract class FFINN {
         void Function(CTensor, double, bool)
       >('torchffi_dropout_');
 
+  static final scaledDotProductAttention = nativeLib
+      .lookupFunction<
+        CTensor Function(
+          CTensor,
+          CTensor,
+          CTensor,
+          CTensor,
+          Double,
+          Bool,
+          Pointer<Double>,
+        ),
+        CTensor Function(
+          CTensor query,
+          CTensor key,
+          CTensor value,
+          CTensor attnMask,
+          double dropoutP,
+          bool isCausal,
+          Pointer<Double> scale,
+        )
+      >('torchffi_scaled_dot_product_attention');
+
   static final embeddingRenorm_ = nativeLib
       .lookupFunction<
         CTensor Function(CTensor, CTensor, Double, Double),

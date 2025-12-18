@@ -408,6 +408,14 @@ extern void torchffi_set_autocast_enabled(int8_t device, bool enabled);
 
 extern bool torchffi_is_autocast_enabled(int8_t device);
 
+extern tensor torchffi_scaled_dot_product_attention(tensor query, tensor key,
+                                                    tensor value,
+                                                    tensor attn_mask,
+                                                    double dropout_p,
+                                                    bool is_causal,
+                                                    double *scale);
+
+
 #ifdef __cplusplus
 }
 #endif
