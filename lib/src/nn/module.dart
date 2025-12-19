@@ -28,6 +28,17 @@ abstract class Module {
     }
   }
 
+  int requiredMemory() {
+    int ret = 0;
+    for (final parameter in parameters) {
+      ret += parameter.elementSize;
+    }
+    for (final parameter in nonTrainableParameters) {
+      ret += parameter.elementSize;
+    }
+    return ret;
+  }
+
   @override
   String toString() {
     return '$runtimeType(${meta.entries.map((e) => '${e.key}: ${e.value}').join(', ')})';
@@ -115,10 +126,7 @@ class Offloader {
   void freeAndLoadModule(Module module, Device device) {
     if (modules.contains(module)) return;
 
-    int requiredMemory = module.parameters.fold(0, (previousValue, element) {
-      if (element.device == device) return previousValue;
-      return previousValue + element.elementSize;
-    });
+    int requiredMemory = module.requiredMemory();
     if (requiredMemory > device.freeMemory) {
       if (!freeMemory(requiredMemory, device)) {
         throw Exception('Not enough memory');
@@ -135,6 +143,12 @@ class Offloader {
       if (device == Device.cpu) continue;
       // TODO pin tensor?
       parameter.to_(device: Device.cpu);
+    }
+    for (final submodule in module.nonTrainableParameters) {
+      final device = submodule.device;
+      if (device == Device.cpu) continue;
+      // TODO pin tensor?
+      submodule.to_(device: Device.cpu);
     }
     modules.remove(module);
     keep.remove(module);

@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'dart:isolate';
 import 'package:ffi/ffi.dart';
 import 'package:tensor/src/ffi/tensor_ffi.dart';
 
@@ -10,16 +11,34 @@ export 'device.dart';
 export 'generator_ffi.dart';
 export 'tensor_ffi.dart';
 
+String getEmbeddedLibraryPath(String filename) {
+  final uri = Uri.parse('package:tensor/assets/$filename');
+  final resolvedUri = Isolate.resolvePackageUriSync(uri);
+
+  if (resolvedUri == null) {
+    throw Exception('Could not resolve package URI for the native library.');
+  }
+
+  return File.fromUri(resolvedUri).path;
+}
+
 String getLibraryPath() {
+  if (Platform.environment.containsKey('TORCH_FFI_LIBRARY_PATH')) {
+    return Platform.environment['TORCH_FFI_LIBRARY_PATH']!;
+  }
+
+  String filename;
   if (Platform.isMacOS) {
-    return 'torchffi/build/libtorchffi.dylib';
+    filename = 'libtorchffi.dylib';
   } else if (Platform.isLinux) {
-    return 'torchffi/build/libtorchffi.so';
+    filename = 'libtorchffi.so';
   } else if (Platform.isWindows) {
-    return 'torchffi/build/libtorchffi.dll';
+    filename = 'libtorchffi.dll';
   } else {
     throw UnsupportedError('Unsupported platform: ${Platform.operatingSystem}');
   }
+
+  return getEmbeddedLibraryPath(filename);
 }
 
 final DynamicLibrary nativeLib = DynamicLibrary.open(getLibraryPath());
