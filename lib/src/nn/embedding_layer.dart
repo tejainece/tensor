@@ -31,10 +31,10 @@ class EmbeddingLayer extends Module implements SimpleModule {
   }
 
   @override
-  Tensor forward(Tensor x, {required Context context}) {
+  Tensor forward(Tensor input, {required Context context}) {
     context.onloadModule(this);
     // Ensure input is on the same device as the weights
-    final inputs = x.to(device: context.device); // TODO remove if possible
+    final inputs = input.to(device: context.device); // TODO remove if possible
     return NNUtil.embedding(
       weights,
       inputs,
@@ -121,10 +121,10 @@ class Dropout extends Module implements SimpleModule, InplaceModule {
     : assert(p >= 0 && p <= 1, 'p must be between 0 and 1');
 
   @override
-  Tensor forward(Tensor x, {required Context context}) {
+  Tensor forward(Tensor input, {required Context context}) {
     context.onloadModule(this);
-    if (p == 0.0 || !context.isTraining) return x;
-    return NNUtil.dropout(x, p, training: context.isTraining);
+    if (p == 0.0 || !context.isTraining) return input;
+    return NNUtil.dropout(input, p, training: context.isTraining);
   }
 
   @override

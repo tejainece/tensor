@@ -13,10 +13,10 @@ class LinearLayer extends Module implements SimpleModule {
   int get outFeatures => weight.shape[0];
 
   @override
-  Tensor forward(Tensor x, {required Context context}) {
+  Tensor forward(Tensor input, {required Context context}) {
     context.onloadModule(this);
     // Ensure input is on the same device as the weights
-    final inputs = x.to(device: context.device); // TODO remove if possible
+    final inputs = input.to(device: context.device); // TODO remove if possible
     return NNUtil.linear(inputs, weight, bias: bias);
   }
 

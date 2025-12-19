@@ -83,11 +83,11 @@ extension ModuleExtension on Module {
 }
 
 abstract class SimpleModule implements Module {
-  Tensor forward(Tensor x, {required Context context});
+  Tensor forward(Tensor input, {required Context context});
 }
 
 abstract class EmbeddableModule implements Module {
-  Tensor forward(Tensor x, {Tensor? embeds, required Context context});
+  Tensor forward(Tensor input, {Tensor? embeds, required Context context});
 }
 
 abstract class InplaceModule implements Module {

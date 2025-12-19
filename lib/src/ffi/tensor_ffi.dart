@@ -253,7 +253,7 @@ abstract class FFITensor {
 
   static final get = nativeLib
       .lookupFunction<
-        CTensor Function(CTensor, Int64),
+        CTensor Function(CTensor, Int32),
         CTensor Function(CTensor tensor, int index)
       >('torchffi_tensor_get');
 
@@ -511,6 +511,79 @@ abstract class FFITensor {
         CTensor Function(CTensor),
         CTensor Function(CTensor tensor)
       >('torchffi_tensor_sinh');
+
+  static final ceil = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_ceil');
+
+  static final ceil_ = nativeLib
+      .lookupFunction<Void Function(CTensor), void Function(CTensor tensor)>(
+        'torchffi_tensor_ceil_',
+      );
+
+  static final floor = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_floor');
+
+  static final floor_ = nativeLib
+      .lookupFunction<Void Function(CTensor), void Function(CTensor tensor)>(
+        'torchffi_tensor_floor_',
+      );
+
+  static final clamp = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor, Pointer<CScalar>, Pointer<CScalar>),
+        CTensor Function(
+          CTensor tensor,
+          Pointer<CScalar> min,
+          Pointer<CScalar> max,
+        )
+      >('torchffi_tensor_clamp');
+
+  static final clamp_ = nativeLib
+      .lookupFunction<
+        Void Function(CTensor, Pointer<CScalar>, Pointer<CScalar>),
+        void Function(
+          CTensor tensor,
+          Pointer<CScalar> min,
+          Pointer<CScalar> max,
+        )
+      >('torchffi_tensor_clamp_');
+
+  static final log = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_log');
+
+  static final log_ = nativeLib
+      .lookupFunction<Void Function(CTensor), void Function(CTensor tensor)>(
+        'torchffi_tensor_log_',
+      );
+
+  static final sin_ = nativeLib
+      .lookupFunction<Void Function(CTensor), void Function(CTensor tensor)>(
+        'torchffi_tensor_sin_',
+      );
+
+  static final cos_ = nativeLib
+      .lookupFunction<Void Function(CTensor), void Function(CTensor tensor)>(
+        'torchffi_tensor_cos_',
+      );
+
+  static final tan_ = nativeLib
+      .lookupFunction<Void Function(CTensor), void Function(CTensor tensor)>(
+        'torchffi_tensor_tan_',
+      );
+
+  static final tanh_ = nativeLib
+      .lookupFunction<Void Function(CTensor), void Function(CTensor tensor)>(
+        'torchffi_tensor_tanh_',
+      );
 
   static final exp = nativeLib
       .lookupFunction<

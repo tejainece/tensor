@@ -1161,6 +1161,80 @@ class Tensor implements ffi.Finalizable {
     return Tensor(FFITensor.sinh(nativePtr));
   }
 
+  Tensor ceil() {
+    return Tensor(FFITensor.ceil(nativePtr));
+  }
+
+  void ceil_() {
+    FFITensor.ceil_(nativePtr);
+  }
+
+  Tensor floor() {
+    return Tensor(FFITensor.floor(nativePtr));
+  }
+
+  void floor_() {
+    FFITensor.floor_(nativePtr);
+  }
+
+  Tensor clamp({dynamic min, dynamic max}) {
+    final arena = ffi.Arena();
+    try {
+      ffi.Pointer<CScalar> minPtr = ffi.nullptr;
+      if (min != null) {
+        minPtr = CScalar.allocateWithValue(arena, min);
+      }
+      ffi.Pointer<CScalar> maxPtr = ffi.nullptr;
+      if (max != null) {
+        maxPtr = CScalar.allocateWithValue(arena, max);
+      }
+      return Tensor(FFITensor.clamp(nativePtr, minPtr, maxPtr));
+    } finally {
+      arena.releaseAll();
+    }
+  }
+
+  void clamp_({dynamic min, dynamic max}) {
+    final arena = ffi.Arena();
+    try {
+      ffi.Pointer<CScalar> minPtr = ffi.nullptr;
+      if (min != null) {
+        minPtr = CScalar.allocateWithValue(arena, min);
+      }
+      ffi.Pointer<CScalar> maxPtr = ffi.nullptr;
+      if (max != null) {
+        maxPtr = CScalar.allocateWithValue(arena, max);
+      }
+      FFITensor.clamp_(nativePtr, minPtr, maxPtr);
+    } finally {
+      arena.releaseAll();
+    }
+  }
+
+  Tensor log() {
+    return Tensor(FFITensor.log(nativePtr));
+  }
+
+  void log_() {
+    FFITensor.log_(nativePtr);
+  }
+
+  void sin_() {
+    FFITensor.sin_(nativePtr);
+  }
+
+  void cos_() {
+    FFITensor.cos_(nativePtr);
+  }
+
+  void tan_() {
+    FFITensor.tan_(nativePtr);
+  }
+
+  void tanh_() {
+    FFITensor.tanh_(nativePtr);
+  }
+
   Tensor exp() {
     final tensor = FFITensor.exp(nativePtr);
     return Tensor(tensor);

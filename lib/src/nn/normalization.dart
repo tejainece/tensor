@@ -29,9 +29,9 @@ class LayerNorm extends Module implements Normalization {
   }
 
   @override
-  Tensor forward(Tensor x, {Tensor? embeds, required Context context}) {
+  Tensor forward(Tensor input, {Tensor? embeds, required Context context}) {
     context.onloadModule(this);
-    final inputs = x.to(device: context.device); // TODO remove if possible
+    final inputs = input.to(device: context.device); // TODO remove if possible
     return NNUtil.layerNorm(
       inputs,
       normalizedShape,
@@ -170,9 +170,9 @@ class GroupNorm extends Module implements Normalization {
   }
 
   @override
-  Tensor forward(Tensor x, {required Context context}) {
+  Tensor forward(Tensor input, {required Context context}) {
     context.onloadModule(this);
-    final inputs = x.to(device: context.device); // TODO remove if possible
+    final inputs = input.to(device: context.device); // TODO remove if possible
     return NNUtil.groupNorm(
       inputs,
       numGroups,
@@ -284,10 +284,10 @@ class RMSNorm extends Module implements Normalization {
   RMSNorm(this.normalizedShape, {super.name = 'norm', this.weight, this.eps});
 
   @override
-  Tensor forward(Tensor x, {required Context context}) {
+  Tensor forward(Tensor input, {required Context context}) {
     context.onloadModule(this);
     // TODO remove if possible
-    final inputs = x.to(device: context.device);
+    final inputs = input.to(device: context.device);
     return NNUtil.rmsNorm(inputs, normalizedShape, weight: weight, eps: eps);
   }
 
@@ -359,21 +359,21 @@ class RMSNormWithBias extends Module implements Normalization {
   });
 
   @override
-  Tensor forward(Tensor x, {required Context context}) {
+  Tensor forward(Tensor input, {required Context context}) {
     context.onloadModule(this);
     // TOD= remove if possible
-    final inputs = x.to(device: context.device);
+    final inputs = input.to(device: context.device);
     Tensor variance = inputs.pow(2).mean(dim: [-1], keepDim: true);
-    x = inputs * (variance + eps).rsqrt();
+    input = inputs * (variance + eps).rsqrt();
 
     if (weight != null) {
-      x = x * weight!;
+      input = input * weight!;
       if (bias != null) {
-        x = x + bias!;
+        input = input + bias!;
       }
     }
 
-    return x;
+    return input;
   }
 
   @override
@@ -464,7 +464,7 @@ class SpatialNorm extends Module implements Normalization {
   });
 
   @override
-  Tensor forward(Tensor x, {required Context context}) {
+  Tensor forward(Tensor input, {required Context context}) {
     context.onloadModule(this);
     // TODO
     throw UnimplementedError();

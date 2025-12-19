@@ -19,9 +19,9 @@ class AvgPool2D extends Module implements SimpleModule {
   });
 
   @override
-  Tensor forward(Tensor x, {required Context context}) {
+  Tensor forward(Tensor input, {required Context context}) {
     return NN2DUtil.avgPool2D(
-      x,
+      input,
       kernelSize,
       stride: stride,
       padding: padding,

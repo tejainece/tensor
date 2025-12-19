@@ -16,9 +16,7 @@ void main() {
 
       expect(tensor.dataType, DataType.float64);
       expect(tensor.nativePtr, isNot(equals(oldPtr)));
-      expect(tensor[0].scalar, 1.0);
-      expect(tensor[1].scalar, 2.0);
-      expect(tensor[2].scalar, 3.0);
+      expect(tensor.toList(), [1.0, 2.0, 3.0]);
     });
 
     test('to_ is no-op if no change', () {
@@ -33,7 +31,7 @@ void main() {
       // It seems PyTorch might still create a new tensor even if parameters are same if copy=false isn't strictly honored or if it decides to re-allocate.
       // But let's check if the values are preserved.
       expect(tensor.dataType, DataType.float32);
-      expect(tensor[0].scalar, 1.0);
+      expect(tensor.toList(), [1.0, 2.0, 3.0]);
     });
   });
 }

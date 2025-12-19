@@ -7,6 +7,8 @@ import 'package:tensor/tensor.dart';
 abstract class Activation {
   String get name;
 
+  Iterable<String> get aliases;
+
   const Activation();
 
   Tensor forward(Tensor x, {required Context context});
@@ -14,15 +16,19 @@ abstract class Activation {
   static const ReLU relu = ReLU();
   static const QuickGeluActivation quickGelu = QuickGeluActivation();
   static const GeluActivation gelu = GeluActivation();
+  static const GeluTanhActivation geluTanh = GeluTanhActivation();
   static const SiLU silu = SiLU();
 
   static const List<Activation> list = [quickGelu, gelu, silu, relu];
 
   static final Map<String, Activation> _byName = () {
-    final ret = <String, Activation>{"swish": silu};
+    final ret = <String, Activation>{};
     for (final activation in list) {
       ret[activation.name] = activation;
       ret[activation.name.toLowerCase()] = activation;
+      for (final alias in activation.aliases) {
+        ret[alias.toLowerCase()] = activation;
+      }
     }
     return ret;
   }();
@@ -37,6 +43,9 @@ class ReLU implements Activation {
   const ReLU();
 
   @override
+  Iterable<String> get aliases => [];
+
+  @override
   Tensor forward(Tensor x, {required Context context}) {
     return x.relu();
   }
@@ -47,6 +56,9 @@ class QuickGeluActivation implements Activation {
   String get name => "QuickGeLU";
 
   const QuickGeluActivation();
+
+  @override
+  Iterable<String> get aliases => [];
 
   @override
   Tensor forward(Tensor x, {required Context context}) {
@@ -61,6 +73,9 @@ class GeluActivation implements Activation {
   const GeluActivation();
 
   @override
+  Iterable<String> get aliases => [];
+
+  @override
   Tensor forward(Tensor x, {required Context context}) {
     return x.gelu(GeluApporimate.none);
   }
@@ -68,11 +83,14 @@ class GeluActivation implements Activation {
 
 /// Implementation of the GELU activation function currently in Google BERT repo (identical to OpenAI GPT).
 /// Also see the Gaussian Error Linear Units paper: https://huggingface.co/papers/1606.08415
-class GeluNewActivation implements Activation {
+class GeluTanhActivation implements Activation {
   @override
   String get name => "GeLU_New";
 
-  const GeluNewActivation();
+  @override
+  final List<String> aliases = const ["gelu_tanh"];
+
+  const GeluTanhActivation();
 
   @override
   Tensor forward(Tensor x, {required Context context}) {
@@ -93,6 +111,9 @@ class SiLU implements Activation {
   String get name => "SiLU";
 
   const SiLU();
+
+  @override
+  final List<String> aliases = const ["swish"];
 
   @override
   Tensor forward(Tensor x, {required Context context}) {

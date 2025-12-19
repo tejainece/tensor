@@ -281,6 +281,20 @@ extern tensor torchffi_tensor_atan2(tensor input, tensor other);
 extern tensor torchffi_tensor_sinc(tensor input);
 extern tensor torchffi_tensor_sinh(tensor input);
 
+extern tensor torchffi_tensor_ceil(tensor input);
+extern void torchffi_tensor_ceil_(tensor input);
+extern tensor torchffi_tensor_floor(tensor input);
+extern void torchffi_tensor_floor_(tensor input);
+extern tensor torchffi_tensor_clamp(tensor input, Scalar *min, Scalar *max);
+extern void torchffi_tensor_clamp_(tensor input, Scalar *min, Scalar *max);
+extern tensor torchffi_tensor_log(tensor input);
+extern void torchffi_tensor_log_(tensor input);
+
+extern void torchffi_tensor_sin_(tensor input);
+extern void torchffi_tensor_cos_(tensor input);
+extern void torchffi_tensor_tan_(tensor input);
+extern void torchffi_tensor_tanh_(tensor input);
+
 extern tensor torchffi_tensor_exp(tensor input);
 
 extern tensor torchffi_tensor_norm(tensor input, Scalar p, int64_t *dim,

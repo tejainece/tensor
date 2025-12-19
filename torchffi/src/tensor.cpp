@@ -558,6 +558,56 @@ extern tensor torchffi_tensor_sinh(tensor input) {
   return new torch::Tensor(torch::sinh(*input));
 }
 
+extern tensor torchffi_tensor_ceil(tensor input) {
+  return new torch::Tensor(torch::ceil(*input));
+}
+
+extern void torchffi_tensor_ceil_(tensor input) { input->ceil_(); }
+
+extern tensor torchffi_tensor_floor(tensor input) {
+  return new torch::Tensor(torch::floor(*input));
+}
+
+extern void torchffi_tensor_floor_(tensor input) { input->floor_(); }
+
+extern tensor torchffi_tensor_clamp(tensor input, Scalar *min, Scalar *max) {
+  std::optional<at::Scalar> minOpt = std::nullopt;
+  if (min != nullptr) {
+    minOpt = torchffi_to_scalar(*min);
+  }
+  std::optional<at::Scalar> maxOpt = std::nullopt;
+  if (max != nullptr) {
+    maxOpt = torchffi_to_scalar(*max);
+  }
+  return new torch::Tensor(torch::clamp(*input, minOpt, maxOpt));
+}
+
+extern void torchffi_tensor_clamp_(tensor input, Scalar *min, Scalar *max) {
+  std::optional<at::Scalar> minOpt = std::nullopt;
+  if (min != nullptr) {
+    minOpt = torchffi_to_scalar(*min);
+  }
+  std::optional<at::Scalar> maxOpt = std::nullopt;
+  if (max != nullptr) {
+    maxOpt = torchffi_to_scalar(*max);
+  }
+  input->clamp_(minOpt, maxOpt);
+}
+
+extern tensor torchffi_tensor_log(tensor input) {
+  return new torch::Tensor(torch::log(*input));
+}
+
+extern void torchffi_tensor_log_(tensor input) { input->log_(); }
+
+extern void torchffi_tensor_sin_(tensor input) { input->sin_(); }
+
+extern void torchffi_tensor_cos_(tensor input) { input->cos_(); }
+
+extern void torchffi_tensor_tan_(tensor input) { input->tan_(); }
+
+extern void torchffi_tensor_tanh_(tensor input) { input->tanh_(); }
+
 tensor torchffi_tensor_exp(tensor input) {
   at::Tensor tensor = torch::exp(*input);
   return new torch::Tensor(tensor);
