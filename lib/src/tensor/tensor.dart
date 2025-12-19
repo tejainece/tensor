@@ -316,7 +316,7 @@ class Tensor implements ffi.Finalizable {
     List<num> data,
     List<int> sizes, {
     String? name,
-    required DataType datatype,
+    required DataType dataType,
     Device? device,
     Layout? layout,
     MemoryFormat? memoryFormat,
@@ -326,48 +326,48 @@ class Tensor implements ffi.Finalizable {
     final arena = ffi.Arena();
     try {
       ffi.Pointer<ffi.Void> dataPointer;
-      if (datatype == DataType.float32) {
+      if (dataType == DataType.float32) {
         final ptr = arena.allocate<ffi.Float>(
           data.length * ffi.sizeOf<ffi.Float>(),
         );
         ptr.asTypedList(data.length).setAll(0, data.cast<double>());
         dataPointer = ptr.cast<ffi.Void>();
-      } else if (datatype == DataType.float64) {
+      } else if (dataType == DataType.float64) {
         final ptr = arena.allocate<ffi.Double>(
           data.length * ffi.sizeOf<ffi.Double>(),
         );
         ptr.asTypedList(data.length).setAll(0, data.cast<double>());
         dataPointer = ptr.cast<ffi.Void>();
-      } else if (datatype == DataType.int64) {
+      } else if (dataType == DataType.int64) {
         final ptr = arena.allocate<ffi.Int64>(
           data.length * ffi.sizeOf<ffi.Int64>(),
         );
         ptr.asTypedList(data.length).setAll(0, data.cast<int>());
         dataPointer = ptr.cast<ffi.Void>();
-      } else if (datatype == DataType.int32) {
+      } else if (dataType == DataType.int32) {
         final ptr = arena.allocate<ffi.Int32>(
           data.length * ffi.sizeOf<ffi.Int32>(),
         );
         ptr.asTypedList(data.length).setAll(0, data.cast<int>());
         dataPointer = ptr.cast<ffi.Void>();
-      } else if (datatype == DataType.int16) {
+      } else if (dataType == DataType.int16) {
         final ptr = arena.allocate<ffi.Int16>(
           data.length * ffi.sizeOf<ffi.Int16>(),
         );
         ptr.asTypedList(data.length).setAll(0, data.cast<int>());
         dataPointer = ptr.cast<ffi.Void>();
-      } else if (datatype == DataType.int8) {
+      } else if (dataType == DataType.int8) {
         final ptr = arena.allocate<ffi.Int8>(
           data.length * ffi.sizeOf<ffi.Int8>(),
         );
         ptr.asTypedList(data.length).setAll(0, data.cast<int>());
         dataPointer = ptr.cast<ffi.Void>();
       } else {
-        throw Exception('Unsupported data type: $datatype');
+        throw Exception('Unsupported data type: $dataType');
       }
 
       final options = CTensorOptions.make(
-        dataType: datatype,
+        dataType: dataType,
         device: Device.cpu,
         layout: layout,
         memoryFormat: memoryFormat,
@@ -915,7 +915,7 @@ class Tensor implements ffi.Finalizable {
         var scalarTensor = Tensor.from(
           [other.toDouble()],
           [1],
-          datatype: dataType,
+          dataType: dataType,
         );
         if (device != Device.cpu) {
           scalarTensor = scalarTensor.to(device: device);
@@ -989,7 +989,7 @@ class Tensor implements ffi.Finalizable {
         var scalarTensor = Tensor.from(
           [other.toDouble()],
           [1],
-          datatype: dataType,
+          dataType: dataType,
         );
         if (device != Device.cpu) {
           scalarTensor = scalarTensor.to(device: device);
@@ -1030,7 +1030,7 @@ class Tensor implements ffi.Finalizable {
         var scalarTensor = Tensor.from(
           [other.toDouble()],
           [1],
-          datatype: dataType,
+          dataType: dataType,
         );
         if (device != Device.cpu) {
           scalarTensor = scalarTensor.to(device: device);
@@ -1103,6 +1103,62 @@ class Tensor implements ffi.Finalizable {
   Tensor cos() {
     final tensor = FFITensor.cos(nativePtr);
     return Tensor(tensor);
+  }
+
+  Tensor tan() {
+    return Tensor(FFITensor.tan(nativePtr));
+  }
+
+  Tensor tanh() {
+    return Tensor(FFITensor.tanh(nativePtr));
+  }
+
+  Tensor asin() {
+    return Tensor(FFITensor.asin(nativePtr));
+  }
+
+  Tensor arcsin() {
+    return asin();
+  }
+
+  Tensor asinh() {
+    return Tensor(FFITensor.asinh(nativePtr));
+  }
+
+  Tensor arcsinh() {
+    return asinh();
+  }
+
+  Tensor atan() {
+    return Tensor(FFITensor.atan(nativePtr));
+  }
+
+  Tensor arctan() {
+    return atan();
+  }
+
+  Tensor atanh() {
+    return Tensor(FFITensor.atanh(nativePtr));
+  }
+
+  Tensor arctanh() {
+    return atanh();
+  }
+
+  Tensor atan2(Tensor other) {
+    return Tensor(FFITensor.atan2(nativePtr, other.nativePtr));
+  }
+
+  Tensor arctan2(Tensor other) {
+    return atan2(other);
+  }
+
+  Tensor sinc() {
+    return Tensor(FFITensor.sinc(nativePtr));
+  }
+
+  Tensor sinh() {
+    return Tensor(FFITensor.sinh(nativePtr));
   }
 
   Tensor exp() {

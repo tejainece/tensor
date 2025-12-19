@@ -7,7 +7,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0],
         [5],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final sliced = t.slice(0, 1, end: 4);
@@ -20,7 +20,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
         [6],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final sliced = t.slice(0, 0, end: 6, step: 2);
@@ -32,7 +32,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0],
         [5],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final sliced = t.slice(0, 2);
@@ -44,7 +44,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
         [3, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final sliced = t.slice(0, 1, end: 3);
@@ -58,7 +58,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
         [2, 3],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final sliced = t.slice(1, 0, end: 2);

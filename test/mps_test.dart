@@ -27,7 +27,7 @@ void main() {
         final t = Tensor.from(
           [1.0, 2.0, 3.0],
           [3],
-          datatype: DataType.float32,
+          dataType: DataType.float32,
           device: Device.mps(),
         );
         expect(t.device, isA<MPSDevice>());
@@ -41,13 +41,13 @@ void main() {
         final t1 = Tensor.from(
           [1.0, 2.0, 3.0],
           [3],
-          datatype: DataType.float32,
+          dataType: DataType.float32,
           device: Device.mps(),
         );
         final t2 = Tensor.from(
           [4.0, 5.0, 6.0],
           [3],
-          datatype: DataType.float32,
+          dataType: DataType.float32,
           device: Device.mps(),
         );
         final t3 = t1 + t2;
@@ -71,7 +71,7 @@ void main() {
         final t = Tensor.from(
           [1.0],
           [1],
-          datatype: DataType.float32,
+          dataType: DataType.float32,
           device: device,
         );
         print('Tensor created for memory test: $t');

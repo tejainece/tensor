@@ -7,7 +7,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0],
         [3, 3],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final lower = t.tril();

@@ -8,12 +8,12 @@ void main() {
       final batch1 = Tensor.from(
         [1.0, 0.0, 0.0, 1.0],
         [1, 2, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
       final batch2 = Tensor.from(
         [2.0, 0.0, 0.0, 2.0],
         [1, 2, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       // input + 1.0 * (batch1 @ batch2)

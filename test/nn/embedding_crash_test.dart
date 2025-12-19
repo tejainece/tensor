@@ -17,7 +17,7 @@ void main() {
     final inputIds = Tensor.from(
       [0, 1, 2, 3, 4],
       [1, 5],
-      datatype: DataType.int64,
+      dataType: DataType.int64,
     );
 
     print('Calling embedding forward...');

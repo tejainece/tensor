@@ -7,7 +7,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 5.0, 2.0, 8.0, 3.0],
         [5],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
       expect(t.max().scalar, 8.0);
       expect(t.min().scalar, 1.0);
@@ -17,7 +17,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 5.0, 2.0, 8.0, 3.0],
         [5],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
       expect(t.argmax().scalar, 3);
       expect(t.argmin().scalar, 0);
@@ -29,7 +29,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
         [2, 3],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       // dim=0: [4, 5, 6]
@@ -53,7 +53,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 5.0, 3.0, 4.0, 2.0, 6.0],
         [2, 3],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       // dim=1 => indices of max in each row: [1, 2]

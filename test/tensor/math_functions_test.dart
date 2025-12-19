@@ -8,7 +8,7 @@ void main() {
       final t1 = Tensor.from(
         [0.0, math.pi / 6, math.pi / 4, math.pi / 3, math.pi / 2],
         [5],
-        datatype: DataType.float64,
+        dataType: DataType.float64,
       );
       final result = t1.sin();
 
@@ -24,7 +24,7 @@ void main() {
       final t1 = Tensor.from(
         [0.0, math.pi / 3, math.pi / 2, math.pi],
         [4],
-        datatype: DataType.float64,
+        dataType: DataType.float64,
       );
       final result = t1.cos();
 
@@ -39,7 +39,7 @@ void main() {
       final t1 = Tensor.from(
         [0.0, 1.0, 2.0, -1.0],
         [4],
-        datatype: DataType.float64,
+        dataType: DataType.float64,
       );
       final result = t1.exp();
 
@@ -54,7 +54,7 @@ void main() {
       final t1 = Tensor.from(
         [1.0, 4.0, 9.0, 16.0],
         [4],
-        datatype: DataType.float64,
+        dataType: DataType.float64,
       );
       final result = t1.rsqrt();
 
@@ -69,7 +69,7 @@ void main() {
       final t1 = Tensor.from(
         [2.0, 3.0, 4.0, 5.0],
         [4],
-        datatype: DataType.float64,
+        dataType: DataType.float64,
       );
       final result = t1.pow(2.0);
 
@@ -81,7 +81,7 @@ void main() {
     });
 
     test('pow function with negative exponent', () {
-      final t1 = Tensor.from([2.0, 4.0], [2], datatype: DataType.float64);
+      final t1 = Tensor.from([2.0, 4.0], [2], dataType: DataType.float64);
       final result = t1.pow(-1.0);
 
       expect(result.shape, [2]);
@@ -93,7 +93,7 @@ void main() {
       final t1 = Tensor.from(
         [0.0, math.pi / 2, math.pi, 3 * math.pi / 2],
         [2, 2],
-        datatype: DataType.float64,
+        dataType: DataType.float64,
       );
       final result = t1.sin();
 
@@ -108,7 +108,7 @@ void main() {
       final t1 = Tensor.from(
         [0.0, 1.0, 2.0, 3.0],
         [2, 2],
-        datatype: DataType.float64,
+        dataType: DataType.float64,
       );
       final result = t1.exp();
 
@@ -118,7 +118,7 @@ void main() {
     });
 
     test('chaining mathematical operations', () {
-      final t1 = Tensor.from([1.0, 4.0, 9.0], [3], datatype: DataType.float64);
+      final t1 = Tensor.from([1.0, 4.0, 9.0], [3], dataType: DataType.float64);
       // Test: sqrt(x) = 1/rsqrt(x), so x should equal (1/rsqrt(x))^2
       final rsqrtResult = t1.rsqrt();
       final squared = rsqrtResult.pow(-2.0);

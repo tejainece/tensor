@@ -4,9 +4,9 @@ import 'package:test/test.dart';
 void main() {
   group('Tensor.stack', () {
     test('stack 1D tensors along dim 0', () {
-      final a = Tensor.from([1.0, 2.0], [2], datatype: DataType.float32);
-      final b = Tensor.from([3.0, 4.0], [2], datatype: DataType.float32);
-      final c = Tensor.from([5.0, 6.0], [2], datatype: DataType.float32);
+      final a = Tensor.from([1.0, 2.0], [2], dataType: DataType.float32);
+      final b = Tensor.from([3.0, 4.0], [2], dataType: DataType.float32);
+      final c = Tensor.from([5.0, 6.0], [2], dataType: DataType.float32);
 
       Tensor stacked = Tensor.stack([a, b, c], dim: 0);
 
@@ -20,8 +20,8 @@ void main() {
     });
 
     test('stack 1D tensors along dim 1', () {
-      final a = Tensor.from([1.0, 2.0], [2], datatype: DataType.float32);
-      final b = Tensor.from([3.0, 4.0], [2], datatype: DataType.float32);
+      final a = Tensor.from([1.0, 2.0], [2], dataType: DataType.float32);
+      final b = Tensor.from([3.0, 4.0], [2], dataType: DataType.float32);
 
       final stacked = Tensor.stack([a, b], dim: 1);
 
@@ -36,12 +36,12 @@ void main() {
       final a = Tensor.from(
         [1.0, 2.0, 3.0, 4.0],
         [2, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
       final b = Tensor.from(
         [5.0, 6.0, 7.0, 8.0],
         [2, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final stacked = Tensor.stack([a, b], dim: 0);
@@ -60,7 +60,7 @@ void main() {
     });
 
     test('stack single tensor', () {
-      final a = Tensor.from([1.0, 2.0, 3.0], [3], datatype: DataType.float32);
+      final a = Tensor.from([1.0, 2.0, 3.0], [3], dataType: DataType.float32);
       final stacked = Tensor.stack([a], dim: 0);
 
       expect(stacked.shape, [1, 3]);
@@ -75,7 +75,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
         [3, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final row0 = t.select(0, 0);
@@ -95,7 +95,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
         [3, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final col0 = t.select(1, 0);
@@ -111,7 +111,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0],
         [2, 2, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final slice0 = t.select(0, 0);
@@ -133,7 +133,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0],
         [2, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final selected = t.select(0, 1);
@@ -146,9 +146,9 @@ void main() {
 
   group('Tensor.stack and select integration', () {
     test('stack then select recovers original tensors', () {
-      final a = Tensor.from([1.0, 2.0], [2], datatype: DataType.float32);
-      final b = Tensor.from([3.0, 4.0], [2], datatype: DataType.float32);
-      final c = Tensor.from([5.0, 6.0], [2], datatype: DataType.float32);
+      final a = Tensor.from([1.0, 2.0], [2], dataType: DataType.float32);
+      final b = Tensor.from([3.0, 4.0], [2], dataType: DataType.float32);
+      final c = Tensor.from([5.0, 6.0], [2], dataType: DataType.float32);
 
       final stacked = Tensor.stack([a, b, c], dim: 0);
 

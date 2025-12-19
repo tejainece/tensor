@@ -101,7 +101,7 @@ class Context {
 
   final Offloader offloader = Offloader();
 
-  Context({required this.isTraining, required this.device});
+  Context({this.isTraining = false, required this.device});
 
   factory Context.best({bool isTraining = false}) {
     return Context(isTraining: isTraining, device: Device.best());

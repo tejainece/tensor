@@ -7,7 +7,7 @@ void main() {
       final tensor = Tensor.from(
         [1.0, 2.0, 3.0],
         [3],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
       expect(tensor.dataType, DataType.float32);
       final oldPtr = tensor.nativePtr;
@@ -25,7 +25,7 @@ void main() {
       final tensor = Tensor.from(
         [1.0, 2.0, 3.0],
         [3],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       tensor.to_(dataType: DataType.float32);

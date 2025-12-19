@@ -7,7 +7,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0],
         [2, 1, 3],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final flattened = t.flatten();

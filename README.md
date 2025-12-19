@@ -32,16 +32,20 @@ void main() {
 }
 ```
 
-## Roadmap
+# Roadmap
 
-### Feature Phases
-- [ ] Phase 0: Save Module to disk as Safetensor
-- [ ] Phase 1: DownSample2D, UpSample2D
-- [ ] Phase 2: DownEncoderBlock2D, UpDecoderBlock2D
-- [ ] Phase 4: VAE (Flux, SD 1.5, SDXL, Qwen Image)
-- [ ] Phase 5: Unet
-- [ ] Phase 6: Text encoding
-- [ ] Phase 7: LowVRAM system & Graceful C++ exception handling
+## Basic
++ LowVRAM system
++ Low RAM system: support on disk tensors
++ Graceful C++ exception handling
++ Save Module to disk as Safetensor
+
+## Phase 1
++ DownSample2D, UpSample2D
++ DownEncoderBlock2D, UpDecoderBlock2D
++ VAE (Flux, SD 1.5, SDXL, Qwen Image)
++ Unet
++ Text encoding
 
 ## License
 

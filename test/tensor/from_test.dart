@@ -7,7 +7,7 @@ void main() {
       final tensor = Tensor.from(
         [1.0, 2.0, 3.0],
         [3],
-        datatype: DataType.float64,
+        dataType: DataType.float64,
       );
 
       expect(tensor.shape, [3]);

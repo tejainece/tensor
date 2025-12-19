@@ -7,7 +7,7 @@ void main() {
       final t1 = Tensor.from(
         [2.0, 4.0, 6.0, 8.0],
         [4],
-        datatype: DataType.float64,
+        dataType: DataType.float64,
       );
       final t2 = t1 / 2.0;
       expect(t2.shape, [4]);

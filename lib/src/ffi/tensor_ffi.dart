@@ -458,6 +458,60 @@ abstract class FFITensor {
         CTensor Function(CTensor tensor)
       >('torchffi_tensor_cos');
 
+  static final tan = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_tan');
+
+  static final tanh = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_tanh');
+
+  static final asin = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_asin');
+
+  static final asinh = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_asinh');
+
+  static final atan = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_atan');
+
+  static final atanh = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_atanh');
+
+  static final atan2 = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor, CTensor),
+        CTensor Function(CTensor input, CTensor other)
+      >('torchffi_tensor_atan2');
+
+  static final sinc = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_sinc');
+
+  static final sinh = nativeLib
+      .lookupFunction<
+        CTensor Function(CTensor),
+        CTensor Function(CTensor tensor)
+      >('torchffi_tensor_sinh');
+
   static final exp = nativeLib
       .lookupFunction<
         CTensor Function(CTensor),

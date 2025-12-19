@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:tensor/tensor.dart';
 
 // TODO Mish
@@ -61,6 +63,22 @@ class GeluActivation implements Activation {
   @override
   Tensor forward(Tensor x, {required Context context}) {
     return x.gelu(GeluApporimate.none);
+  }
+}
+
+/// Implementation of the GELU activation function currently in Google BERT repo (identical to OpenAI GPT).
+/// Also see the Gaussian Error Linear Units paper: https://huggingface.co/papers/1606.08415
+class GeluNewActivation implements Activation {
+  @override
+  String get name => "GeLU_New";
+
+  const GeluNewActivation();
+
+  @override
+  Tensor forward(Tensor x, {required Context context}) {
+    return x *
+        0.5 *
+        (((x + x.pow(3.0) * 0.044715) * sqrt(2.0 / pi)).tanh() + 1.0);
   }
 }
 

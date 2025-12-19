@@ -19,7 +19,7 @@ void main() {
           0.0, 1.0, 0.0,
         ],
         [2, 2, 3],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final mat2 = Tensor.from(
@@ -34,7 +34,7 @@ void main() {
           50.0, 60.0,
         ],
         [2, 3, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final result = input.bmm(mat2);

@@ -5,7 +5,7 @@ import 'dart:math' as math;
 void main() {
   group('Tensor.norm', () {
     test('L2 norm of 1D tensor', () {
-      final t = Tensor.from([3.0, 4.0], [2], datatype: DataType.float32);
+      final t = Tensor.from([3.0, 4.0], [2], dataType: DataType.float32);
       final norm = t.norm(2);
 
       expect(norm.shape, []);
@@ -13,7 +13,7 @@ void main() {
     });
 
     test('L1 norm of 1D tensor', () {
-      final t = Tensor.from([3.0, -4.0], [2], datatype: DataType.float32);
+      final t = Tensor.from([3.0, -4.0], [2], dataType: DataType.float32);
       final norm = t.norm(1);
 
       expect(norm.shape, []);
@@ -24,7 +24,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0],
         [2, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
       final norm = t.norm(2);
 
@@ -37,7 +37,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0],
         [2, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       // Norm along dim 0 (columns)
@@ -57,7 +57,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0],
         [2, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final norm = t.norm(2, dim: [0], keepDim: true);
@@ -68,7 +68,7 @@ void main() {
       final t = Tensor.from(
         [1.0, -5.0, 3.0, 2.0],
         [4],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final norm = t.norm(double.infinity);
@@ -80,7 +80,7 @@ void main() {
       final t = Tensor.from(
         [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0],
         [2, 2, 2],
-        datatype: DataType.float32,
+        dataType: DataType.float32,
       );
 
       final norm = t.norm(2, dim: [1, 2]);
@@ -93,7 +93,7 @@ void main() {
     });
 
     test('L2 norm for normalization', () {
-      final t = Tensor.from([3.0, 4.0], [2], datatype: DataType.float32);
+      final t = Tensor.from([3.0, 4.0], [2], dataType: DataType.float32);
       final normValue = t.norm(2);
       final normalized = t / normValue.scalar;
 
@@ -103,7 +103,7 @@ void main() {
     });
 
     test('norm with default p=2', () {
-      final t = Tensor.from([1.0, 1.0, 1.0], [3], datatype: DataType.float32);
+      final t = Tensor.from([1.0, 1.0, 1.0], [3], dataType: DataType.float32);
       final norm = t.norm(2);
 
       expect(norm.scalar, closeTo(math.sqrt(3), 1e-6));

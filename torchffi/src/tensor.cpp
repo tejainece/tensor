@@ -522,6 +522,42 @@ tensor torchffi_tensor_cos(tensor input) {
   return new torch::Tensor(tensor);
 }
 
+extern tensor torchffi_tensor_tan(tensor input) {
+  return new torch::Tensor(torch::tan(*input));
+}
+
+extern tensor torchffi_tensor_tanh(tensor input) {
+  return new torch::Tensor(torch::tanh(*input));
+}
+
+extern tensor torchffi_tensor_asin(tensor input) {
+  return new torch::Tensor(torch::asin(*input));
+}
+
+extern tensor torchffi_tensor_asinh(tensor input) {
+  return new torch::Tensor(torch::asinh(*input));
+}
+
+extern tensor torchffi_tensor_atan(tensor input) {
+  return new torch::Tensor(torch::atan(*input));
+}
+
+extern tensor torchffi_tensor_atanh(tensor input) {
+  return new torch::Tensor(torch::atanh(*input));
+}
+
+extern tensor torchffi_tensor_atan2(tensor input, tensor other) {
+  return new torch::Tensor(torch::atan2(*input, *other));
+}
+
+extern tensor torchffi_tensor_sinc(tensor input) {
+  return new torch::Tensor(torch::sinc(*input));
+}
+
+extern tensor torchffi_tensor_sinh(tensor input) {
+  return new torch::Tensor(torch::sinh(*input));
+}
+
 tensor torchffi_tensor_exp(tensor input) {
   at::Tensor tensor = torch::exp(*input);
   return new torch::Tensor(tensor);
