@@ -8,7 +8,7 @@ Future<void> main() async {
   Device device = Device(deviceType: DeviceType.cpu, deviceIndex: -1);
 
   final file = await SafeTensorsFile.load(
-    './test_data/init/kaiming_uniform_tests.safetensors',
+    './testdata/test_data/init/kaiming_uniform_tests.safetensors',
   );
   final loader = file.cpuLoader();
   final tests = await _TestCase.loadAllFromSafeTensor(loader);

@@ -49,9 +49,7 @@ void main() {
 
       final sliced = t.slice(0, 1, end: 3);
       expect(sliced.shape, [2, 2]);
-      expect(sliced.toList(), [
-        [3.0, 4.0, 5.0, 6.0],
-      ]);
+      expect(sliced.toList(), [3.0, 4.0, 5.0, 6.0]);
     });
 
     test('slice 2D tensor along dim 1', () {
@@ -63,9 +61,7 @@ void main() {
 
       final sliced = t.slice(1, 0, end: 2);
       expect(sliced.shape, [2, 2]);
-      expect(sliced.toList(), [
-        [1.0, 2.0, 4.0, 5.0],
-      ]);
+      expect(sliced.toList(), [1.0, 2.0, 4.0, 5.0]);
     });
   });
 
