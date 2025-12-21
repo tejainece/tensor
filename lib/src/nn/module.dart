@@ -94,6 +94,7 @@ abstract class InplaceModule implements Module {
   void forward_(Tensor x, {required Context context});
 }
 
+// TODO support loading and inference/training phases.
 class Context {
   bool isTraining;
 

@@ -4,3 +4,4 @@ export 'module.dart';
 export 'normalization.dart';
 export 'conv2d.dart';
 export 'linear_layer.dart';
+export 'linear_transposed.dart';

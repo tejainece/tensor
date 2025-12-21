@@ -1,32 +1,39 @@
-import 'dart:math';
-
 import 'package:tensor/tensor.dart';
 
-class LinearLayer extends Module implements SimpleModule {
+/// 1D-convolutional layer as defined by Radford et al. for OpenAI GPT (and also used in GPT-2).
+/// Basically acts like a Linear layer but the weights are transposed.
+class LinearTransposed extends Module implements SimpleModule {
+  /// The weight matrix of shape [numInFeatures, numOutFeatures].
   final Tensor weight;
   final Tensor? bias;
 
-  LinearLayer({super.name = 'linear', required this.weight, this.bias});
+  LinearTransposed({
+    super.name = 'linear_transposed',
+    required this.weight,
+    this.bias,
+  });
 
-  int get numInFeatures => weight.shape[1];
-
-  int get numOutFeatures => weight.shape[0];
+  int get numInFeatures => weight.shape[0];
+  int get numOutFeatures => weight.shape[1];
 
   @override
   Tensor forward(Tensor input, {required Context context}) {
     context.onloadModule(this);
     // Ensure input is on the same device as the weights
     final inputs = input.to(device: context.device); // TODO remove if possible
-    return NNUtil.linear(inputs, weight, bias: bias);
+    Tensor output = inputs.matmul(weight);
+    if (bias != null) {
+      output = output + bias!;
+    }
+    return output;
   }
 
   @override
-  void resetParameters() {
-    Init.kaimingUniform_(weight, a: sqrt(5));
+  void resetParameters({Generator? generator}) {
+    // Transformers Conv1D uses normal distribution with std 0.02
+    weight.normal_(mean: 0.0, std: 0.02, generator: generator);
     if (bias != null) {
-      final fan = Init.calculateKaimingFan(weight);
-      double bound = fan.fanIn > 0 ? 1 / sqrt(fan.fanIn) : 0;
-      bias!.uniform_(from: -bound, to: bound);
+      bias!.zeros_();
     }
   }
 
@@ -57,28 +64,28 @@ class LinearLayer extends Module implements SimpleModule {
     }
   }
 
-  static Future<LinearLayer> loadFromSafeTensor(
+  static Future<LinearTransposed> loadFromSafeTensor(
     SafeTensorLoader loader, {
     String prefix = '',
-    String name = 'linear',
+    String name = 'linear_transposed',
   }) async {
     final weight = await loader.loadByName('${prefix}weight');
     Tensor? bias;
     if (loader.hasTensor('${prefix}bias')) {
       bias = await loader.loadByName('${prefix}bias');
     }
-    return LinearLayer(name: name, weight: weight, bias: bias);
+    return LinearTransposed(name: name, weight: weight, bias: bias);
   }
 
-  static LinearLayer make({
-    String name = 'linear',
-    required int inFeatures,
-    required int outFeatures,
+  static LinearTransposed make({
+    String name = 'linear_transposed',
+    required int numInFeatures,
+    required int numOutFeatures,
     bool hasBias = true,
   }) {
-    final weight = Tensor.empty([outFeatures, inFeatures]);
-    final bias = hasBias ? Tensor.empty([outFeatures]) : null;
-    return LinearLayer(name: name, weight: weight, bias: bias)
+    final weight = Tensor.empty([numInFeatures, numOutFeatures]);
+    final bias = hasBias ? Tensor.empty([numOutFeatures]) : null;
+    return LinearTransposed(name: name, weight: weight, bias: bias)
       ..resetParameters();
   }
 }

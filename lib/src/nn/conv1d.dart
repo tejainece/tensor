@@ -2,12 +2,6 @@ import 'dart:math';
 
 import 'package:tensor/tensor.dart';
 
-import '../tensor/tensor.dart';
-import '../safetensor/safetensor.dart';
-import 'module.dart';
-
-/// 1D-convolutional layer as defined by Radford et al. for OpenAI GPT (and also used in GPT-2).
-/// Effectively a Linear layer with transposed weights.
 class Conv1D extends Module implements SimpleModule {
   /// [weight] is of shape (numOutChannels, numInChannels, kernelSize)
   Tensor weight;
@@ -18,10 +12,12 @@ class Conv1D extends Module implements SimpleModule {
   Conv1D({required super.name, required this.weight, this.bias});
 
   @override
-  /// [input] is of shape (batch, seq_length, numInChannels)
-  /// [output] is of shape (batch, seq_length, numOutChannels)
+  /// [input] is of shape (batch, numInChannels, input_seq_length)
+  /// [output] is of shape (batch, numOutChannels, output_seq_length)
   Tensor forward(Tensor input, {required Context context}) {
     context.onloadModule(this);
+
+    input = input.to(device: context.device); // TODO handle this better?
 
     Tensor output = input.matmul(weight);
     if (bias != null) {
