@@ -19,7 +19,7 @@ abstract class Activation {
   static const GeluTanhActivation geluTanh = GeluTanhActivation();
   static const SiLU silu = SiLU();
 
-  static const List<Activation> list = [quickGelu, gelu, silu, relu];
+  static const List<Activation> list = [quickGelu, gelu, silu, relu, geluTanh];
 
   static final Map<String, Activation> _byName = () {
     final ret = <String, Activation>{};

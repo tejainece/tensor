@@ -393,7 +393,7 @@ extern void torchffi_finfo(int8_t dtype, FInfo *info);
 
 extern Generator torchffi_get_default_generator(Device *device);
 
-extern Generator torchffi_generator_new();
+extern Generator torchffi_generator_new(Device *device);
 
 extern Generator torchffi_generator_clone(Generator generator);
 

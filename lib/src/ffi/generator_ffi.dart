@@ -12,6 +12,11 @@ abstract class FFIGenerator {
         CGenerator Function(Pointer<CDevice>),
         CGenerator Function(Pointer<CDevice>)
       >('torchffi_get_default_generator');
+  static final createGenerator = nativeLib
+      .lookupFunction<
+        CGenerator Function(Pointer<CDevice>),
+        CGenerator Function(Pointer<CDevice>)
+      >('torchffi_generator_new');
 
   static final getCurrentSeed = nativeLib
       .lookupFunction<Uint64 Function(CGenerator), int Function(CGenerator)>(
@@ -73,6 +78,24 @@ class Generator {
         );
       }
       final generator = FFIGenerator.getDefaultGenerator(devicePtr);
+      return Generator(generator);
+    } finally {
+      arena.releaseAll();
+    }
+  }
+
+  static Generator create({Device? device}) {
+    final arena = Arena();
+    try {
+      Pointer<CDevice> devicePtr = nullptr;
+      if (device != null) {
+        devicePtr = CDevice.make(
+          deviceType: device.deviceType,
+          deviceIndex: device.deviceIndex,
+          allocator: arena,
+        );
+      }
+      final generator = FFIGenerator.createGenerator(devicePtr);
       return Generator(generator);
     } finally {
       arena.releaseAll();

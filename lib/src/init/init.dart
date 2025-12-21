@@ -12,6 +12,15 @@ abstract class Init {
     tensor.uniform_(from: from, to: to, generator: generator);
   }
 
+  static void normal_(
+    Tensor tensor, {
+    double mean = 0,
+    double std = 1,
+    Generator? generator,
+  }) {
+    tensor.normal_(mean: mean, std: std, generator: generator);
+  }
+
   static void kaimingUniform_(
     Tensor tensor, {
     double a = 0,
@@ -72,7 +81,8 @@ double calculateGain(KaimingNonLinearity nonLinearity, double? param) {
         KaimingNonLinearity.conv3d ||
         KaimingNonLinearity.convTranspose1d ||
         KaimingNonLinearity.convTranspose2d ||
-        KaimingNonLinearity.convTranspose3d:
+        KaimingNonLinearity.convTranspose3d ||
+        KaimingNonLinearity.sigmoid:
       return 1.0;
     case KaimingNonLinearity.tanh:
       return 5.0 / 3.0;

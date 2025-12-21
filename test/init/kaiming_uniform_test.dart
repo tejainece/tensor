@@ -16,10 +16,12 @@ Future<void> main() async {
   group('Init.KaimingUniform_', () {
     test('tests', () {
       for (final test in tests) {
-        final generator = Generator.getDefault(device: device);
+        final generator = Generator.create(device: device);
         generator.currentSeed = test.seed;
         final weights = Tensor.empty(test.size, device: device);
         Init.kaimingUniform_(weights, a: sqrt(5), generator: generator);
+        final diff = (test.output - weights).abs().max().scalar as double;
+        print('Max diff for ${test.name}: $diff');
         expect(
           test.output.allClose(weights),
           true,

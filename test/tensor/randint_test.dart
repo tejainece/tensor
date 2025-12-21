@@ -38,7 +38,7 @@ void main() {
     });
 
     test('creates tensor with generator', () {
-      final generator = Generator.getDefault();
+      final generator = Generator.create();
       generator.currentSeed = 42;
       final tensor1 = Tensor.randint(100, [5], generator: generator);
 

@@ -37,6 +37,8 @@ void main() {
 ## Basic
 + LowVRAM system
 + Low RAM system: support on disk tensors
++ Implement multi GPU pipeline parallelism: fit continous modules into one gpu, then another and then another ....
++ Implement multi GPU Tensor parallelism: try to see if same module could be split across multiple gpus. maybe result in really bad performance anyway
 + Graceful C++ exception handling
 + Save Module to disk as Safetensor
 
