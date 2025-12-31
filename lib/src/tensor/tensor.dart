@@ -64,7 +64,7 @@ class Tensor implements ffi.Finalizable {
     List<int> sizes, {
     String? name,
     Device? device,
-    DataType? datatype,
+    DataType? dataType,
     Layout? layout,
     MemoryFormat? memoryFormat,
     bool? requiresGrad,
@@ -73,7 +73,7 @@ class Tensor implements ffi.Finalizable {
     final arena = ffi.Arena();
     try {
       final options = CTensorOptions.make(
-        dataType: datatype,
+        dataType: dataType,
         device: device,
         layout: layout,
         memoryFormat: memoryFormat,
@@ -130,7 +130,7 @@ class Tensor implements ffi.Finalizable {
     num step = 1,
     String? name,
     Device? device,
-    DataType? datatype,
+    DataType? dataType,
     Layout? layout,
     MemoryFormat? memoryFormat,
     bool? requiresGrad,
@@ -139,7 +139,7 @@ class Tensor implements ffi.Finalizable {
     final arena = ffi.Arena();
     try {
       final options = CTensorOptions.make(
-        dataType: datatype,
+        dataType: dataType,
         device: device,
         layout: layout,
         memoryFormat: memoryFormat,
@@ -912,11 +912,16 @@ class Tensor implements ffi.Finalizable {
         );
         return Tensor(tensor);
       } else if (other is num) {
-        var scalarTensor = Tensor.from(
-          [other.toDouble()],
-          [1],
-          dataType: dataType,
-        );
+        Tensor scalarTensor;
+        if (other is int) {
+          scalarTensor = Tensor.from([other], [1], dataType: DataType.int64);
+        } else {
+          scalarTensor = Tensor.from(
+            [other.toDouble()],
+            [1],
+            dataType: DataType.float64,
+          );
+        }
         if (device != Device.cpu) {
           scalarTensor = scalarTensor.to(device: device);
         }
@@ -948,28 +953,6 @@ class Tensor implements ffi.Finalizable {
     }
   }
 
-  List<int>? allCloseSlow(Tensor other, {double atol = 1e-08}) {
-    if (isScalar) {
-      if (!other.isScalar) return [];
-      if ((scalar - other.scalar).abs() > atol) {
-        print(
-          'Scalar mismatch: $scalar vs ${other.scalar} diff: ${(scalar - other.scalar).abs()}',
-        );
-        return [];
-      }
-      return null;
-    }
-
-    final shape = this.shape;
-    if (shape.first != other.shape.first) return [];
-
-    for (int i = 0; i < shape.first; i++) {
-      final result = this[i].allCloseSlow(other[i], atol: atol);
-      if (result != null) return [i, ...result];
-    }
-    return null;
-  }
-
   Tensor operator -(dynamic /* Tensor | num */ other) {
     final arena = ffi.Arena();
     try {
@@ -986,11 +969,16 @@ class Tensor implements ffi.Finalizable {
         final alpha = CScalar.allocate(arena);
         alpha.ref.setInt(1);
 
-        var scalarTensor = Tensor.from(
-          [other.toDouble()],
-          [1],
-          dataType: dataType,
-        );
+        Tensor scalarTensor;
+        if (other is int) {
+          scalarTensor = Tensor.from([other], [1], dataType: DataType.int64);
+        } else {
+          scalarTensor = Tensor.from(
+            [other.toDouble()],
+            [1],
+            dataType: DataType.float64,
+          );
+        }
         if (device != Device.cpu) {
           scalarTensor = scalarTensor.to(device: device);
         }
@@ -1027,11 +1015,16 @@ class Tensor implements ffi.Finalizable {
         final tensor = FFITensor.multiplication(nativePtr, other.nativePtr);
         return Tensor(tensor);
       } else if (other is num) {
-        var scalarTensor = Tensor.from(
-          [other.toDouble()],
-          [1],
-          dataType: dataType,
-        );
+        Tensor scalarTensor;
+        if (other is int) {
+          scalarTensor = Tensor.from([other], [1], dataType: DataType.int64);
+        } else {
+          scalarTensor = Tensor.from(
+            [other.toDouble()],
+            [1],
+            dataType: DataType.float64,
+          );
+        }
         if (device != Device.cpu) {
           scalarTensor = scalarTensor.to(device: device);
         }
@@ -1437,6 +1430,28 @@ class Tensor implements ffi.Finalizable {
       generator?.nativePtr ?? ffi.nullptr,
     );
     return Tensor(tensor);
+  }
+
+  List<int>? allCloseSlow(Tensor other, {double atol = 1e-08}) {
+    if (isScalar) {
+      if (!other.isScalar) return [];
+      if ((scalar - other.scalar).abs() > atol) {
+        print(
+          'Scalar mismatch: $scalar vs ${other.scalar} diff: ${(scalar - other.scalar).abs()}',
+        );
+        return [];
+      }
+      return null;
+    }
+
+    final shape = this.shape;
+    if (shape.first != other.shape.first) return [];
+
+    for (int i = 0; i < shape.first; i++) {
+      final result = this[i].allCloseSlow(other[i], atol: atol);
+      if (result != null) return [i, ...result];
+    }
+    return null;
   }
 
   Tensor lt(dynamic other) {

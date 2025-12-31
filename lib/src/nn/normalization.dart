@@ -127,7 +127,7 @@ class LayerNorm extends Module implements Normalization {
       if (hasBias) {
         bias = Tensor.zeros(
           normalizedShape,
-          datatype: dataType ?? DataType.float32,
+          dataType: dataType ?? DataType.float32,
           device: device ?? Device.cpu,
         );
       }
