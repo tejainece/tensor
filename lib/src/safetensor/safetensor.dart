@@ -4,13 +4,6 @@ import 'package:universal_io/io.dart';
 export 'metadata.dart';
 export 'storage.dart';
 
-abstract class SafeTensors {
-  SafeTensorHeader get header;
-
-  // TODO device type argument
-  Tensor getTensor(String name);
-}
-
 /// File-backed safetensors. The tensor data is read from file/harddisk on demand.
 /// Recommended when the tensors are read once into memory. Not recommended when
 /// the

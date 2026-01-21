@@ -19,6 +19,23 @@ class Tensor implements ffi.Finalizable {
     }
   }
 
+  factory Tensor.native() {
+    final arena = ffi.Arena();
+    try {
+      final error = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      error.value = ffi.nullptr;
+      final tensor = FFITensor.constructor(error);
+      if (error.value != ffi.nullptr) {
+        throw makeCException(error);
+      }
+      return Tensor(tensor);
+    } finally {
+      arena.releaseAll();
+    }
+  }
+
   static final _finalizer = ffi.NativeFinalizer(FFITensor.delete);
 
   void release() {
@@ -53,7 +70,19 @@ class Tensor implements ffi.Finalizable {
         ffi.sizeOf<ffi.Int64>() * sizes.length,
       );
       sizesPointer.asTypedList(sizes.length).setAll(0, sizes);
-      final tensor = FFITensor.empty(sizesPointer, sizes.length, options.ref);
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
+      final tensor = FFITensor.empty(
+        sizesPointer,
+        sizes.length,
+        options.ref,
+        errPtr,
+      );
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       return Tensor(tensor, name: name);
     } finally {
       arena.releaseAll();
@@ -85,7 +114,19 @@ class Tensor implements ffi.Finalizable {
         ffi.sizeOf<ffi.Int64>() * sizes.length,
       );
       sizesPointer.asTypedList(sizes.length).setAll(0, sizes);
-      final tensor = FFITensor.zeros(sizesPointer, sizes.length, options.ref);
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
+      final tensor = FFITensor.zeros(
+        sizesPointer,
+        sizes.length,
+        options.ref,
+        errPtr,
+      );
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       return Tensor(tensor, name: name);
     } finally {
       arena.releaseAll();
@@ -117,7 +158,19 @@ class Tensor implements ffi.Finalizable {
         ffi.sizeOf<ffi.Int64>() * sizes.length,
       );
       sizesPointer.asTypedList(sizes.length).setAll(0, sizes);
-      final tensor = FFITensor.ones(sizesPointer, sizes.length, options.ref);
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
+      final tensor = FFITensor.ones(
+        sizesPointer,
+        sizes.length,
+        options.ref,
+        errPtr,
+      );
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       return Tensor(tensor, name: name);
     } finally {
       arena.releaseAll();
@@ -148,12 +201,20 @@ class Tensor implements ffi.Finalizable {
         allocator: arena,
       );
 
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
       final tensor = FFITensor.arange(
         CScalar.allocateWithValue(arena, start),
         CScalar.allocateWithValue(arena, end),
         CScalar.allocateWithValue(arena, step),
         options.ref,
+        errPtr,
       );
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       return Tensor(tensor, name: name);
     } finally {
       arena.releaseAll();
@@ -187,12 +248,20 @@ class Tensor implements ffi.Finalizable {
         ffi.sizeOf<ffi.Int64>() * sizes.length,
       );
       sizesPointer.asTypedList(sizes.length).setAll(0, sizes);
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
       final tensor = FFITensor.rand(
         sizesPointer,
         sizes.length,
         cGenerator,
         options.ref,
+        errPtr,
       );
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       return Tensor(tensor, name: name);
     } finally {
       arena.releaseAll();
@@ -226,12 +295,20 @@ class Tensor implements ffi.Finalizable {
         ffi.sizeOf<ffi.Int64>() * sizes.length,
       );
       sizesPointer.asTypedList(sizes.length).setAll(0, sizes);
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
       final tensor = FFITensor.randn(
         sizesPointer,
         sizes.length,
         cGenerator,
         options.ref,
+        errPtr,
       );
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       return Tensor(tensor, name: name);
     } finally {
       arena.releaseAll();
@@ -267,6 +344,10 @@ class Tensor implements ffi.Finalizable {
         ffi.sizeOf<ffi.Int64>() * sizes.length,
       );
       sizesPointer.asTypedList(sizes.length).setAll(0, sizes);
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
       final tensor = FFITensor.randint(
         low,
         high,
@@ -274,7 +355,11 @@ class Tensor implements ffi.Finalizable {
         sizes.length,
         cGenerator,
         options.ref,
+        errPtr,
       );
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       return Tensor(tensor, name: name);
     } finally {
       arena.releaseAll();
@@ -304,7 +389,14 @@ class Tensor implements ffi.Finalizable {
         pinnedMemory: pinnedMemory,
         allocator: arena,
       );
-      final tensor = FFITensor.eye(n, m, options.ref);
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
+      final tensor = FFITensor.eye(n, m, options.ref, errPtr);
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       return Tensor(tensor, name: name);
     } finally {
       arena.releaseAll();
@@ -312,7 +404,7 @@ class Tensor implements ffi.Finalizable {
   }
 
   static Tensor from(
-    // TODO this should also accept int data and TypedList
+    // TODO this should also accept TypedList
     List<num> data,
     List<int> sizes, {
     String? name,
@@ -382,12 +474,20 @@ class Tensor implements ffi.Finalizable {
       sizesPointer.asTypedList(sizes.length).setAll(0, sizes);
       // TODO check if there is way to avoid clone
       // TODO fromBlob only works on cpu, fix it
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
       final tensorPtr = FFITensor.fromBlob(
         dataPointer.cast<ffi.Void>(),
         sizesPointer,
         sizes.length,
         options.ref,
+        errPtr,
       );
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       final tensor = Tensor(tensorPtr, name: name);
       if (device != null && device.deviceType != DeviceType.cpu) {
         return tensor.to(device: device);
@@ -425,12 +525,20 @@ class Tensor implements ffi.Finalizable {
         sizes.length * ffi.sizeOf<ffi.Int64>(),
       );
       sizesPointer.asTypedList(sizes.length).setAll(0, sizes);
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
       final tensor = FFITensor.fromBlob(
         dataPointer,
         sizesPointer,
         sizes.length,
         options.ref,
+        errPtr,
       );
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       return Tensor(tensor, name: name);
     } finally {
       arena.releaseAll();
@@ -438,7 +546,19 @@ class Tensor implements ffi.Finalizable {
   }
 
   void ones_() {
-    FFITensor.ones_(nativePtr);
+    final arena = ffi.Arena();
+    try {
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
+      FFITensor.ones_(nativePtr, errPtr);
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
+    } finally {
+      arena.releaseAll();
+    }
   }
 
   void zeros_() {
@@ -852,7 +972,14 @@ class Tensor implements ffi.Finalizable {
         memoryFormatPtr = arena.allocate<ffi.Int8>(ffi.sizeOf<ffi.Int8>());
         memoryFormatPtr.value = memoryFormat.id;
       }
-      final tensor = FFITensor.clone(nativePtr, memoryFormatPtr);
+      final errPtr = arena.allocate<ffi.Pointer<ffi.Utf8>>(
+        ffi.sizeOf<ffi.Pointer<ffi.Utf8>>(),
+      );
+      errPtr.value = ffi.nullptr;
+      final tensor = FFITensor.clone(nativePtr, memoryFormatPtr, errPtr);
+      if (errPtr.value != ffi.nullptr) {
+        throw makeCException(errPtr);
+      }
       return Tensor(tensor);
     } finally {
       arena.releaseAll();
@@ -919,7 +1046,7 @@ class Tensor implements ffi.Finalizable {
           scalarTensor = Tensor.from(
             [other.toDouble()],
             [1],
-            dataType: DataType.float64,
+            dataType: DataType.float32,
           );
         }
         if (device != Device.cpu) {
@@ -976,7 +1103,7 @@ class Tensor implements ffi.Finalizable {
           scalarTensor = Tensor.from(
             [other.toDouble()],
             [1],
-            dataType: DataType.float64,
+            dataType: DataType.float32,
           );
         }
         if (device != Device.cpu) {
@@ -1022,7 +1149,7 @@ class Tensor implements ffi.Finalizable {
           scalarTensor = Tensor.from(
             [other.toDouble()],
             [1],
-            dataType: DataType.float64,
+            dataType: DataType.float32,
           );
         }
         if (device != Device.cpu) {
@@ -1505,6 +1632,7 @@ class Tensor implements ffi.Finalizable {
     }
   }
 
+  /// Fills the elements of the tensor with the [value] where the mask is true.
   Tensor maskedFill(Tensor mask, dynamic value) {
     final arena = ffi.Arena();
     try {
@@ -2019,7 +2147,7 @@ abstract class Index {
   factory Index.slice([int? start, int? end, int step = 1]) =>
       Slice(start, end, step);
 
-  factory Index.to(int end, [int step = 1]) => Slice(null, end, step);
+  factory Index.till(int end, [int step = 1]) => Slice(null, end, step);
 
   factory Index.i(int index) => IndexOne(index);
 
@@ -2035,7 +2163,7 @@ class IndexOne implements Index {
 }
 
 extension IntSlice on int {
-  Index to(int end, [int step = 1]) => Index.to(end, step);
+  Index till(int end, [int step = 1]) => Index.till(end, step);
 }
 
 class IndexBool implements Index {
@@ -2347,5 +2475,43 @@ Tensor interpolateNearestExactScale(
     return Tensor(tensorPtr);
   } finally {
     arena.releaseAll();
+  }
+}
+
+extension NumToTensor on num {
+  Tensor to({
+    DataType? dataType,
+    Device? device,
+    String? name,
+    bool? requiresGrad,
+    bool? pinnedMemory,
+  }) {
+    DataType dt;
+    if (dataType != null) {
+      dt = dataType;
+    } else {
+      if (this is int) {
+        dt = DataType.int64;
+      } else {
+        dt = DataType.float32;
+      }
+    }
+
+    num value = this;
+    if (dt == DataType.float32 || dt == DataType.float64) {
+      value = toDouble();
+    } else {
+      value = toInt();
+    }
+
+    return Tensor.from(
+      [value],
+      [],
+      name: name,
+      dataType: dt,
+      device: device,
+      requiresGrad: requiresGrad,
+      pinnedMemory: pinnedMemory,
+    );
   }
 }

@@ -21,6 +21,10 @@ abstract class Module {
       if (parameter.device == device) continue;
       parameter.to_(device: device);
     }
+    for (final parameter in nonTrainableParameters) {
+      if (parameter.device == device) continue;
+      parameter.to_(device: device);
+    }
     if (cascade) {
       for (final submodule in submodules) {
         submodule.to_(device, cascade: cascade);

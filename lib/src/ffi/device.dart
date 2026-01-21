@@ -261,8 +261,7 @@ class CudaDevice extends Device {
       errorPtr.value = nullptr;
       final ret = _FFIDevice.cudaMemoryAllocated(deviceIndex, errorPtr);
       if (errorPtr.value != nullptr) {
-        final error = errorPtr.value.toDartString();
-        throw Exception(error);
+        throw makeCException(errorPtr);
       }
       return ret;
     } finally {
@@ -279,8 +278,7 @@ class CudaDevice extends Device {
       errorPtr.value = nullptr;
       final ret = _FFIDevice.cudaMemoryReserved(deviceIndex, errorPtr);
       if (errorPtr.value != nullptr) {
-        final error = errorPtr.value.toDartString();
-        throw Exception(error);
+        throw makeCException(errorPtr);
       }
       return ret;
     } finally {

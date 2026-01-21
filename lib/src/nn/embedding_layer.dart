@@ -35,6 +35,7 @@ class EmbeddingLayer extends Module implements SimpleModule {
     context.onloadModule(this);
     // Ensure input is on the same device as the weights
     final inputs = input.to(device: context.device); // TODO remove if possible
+
     return NNUtil.embedding(
       weights,
       inputs,
@@ -103,14 +104,17 @@ class EmbeddingLayer extends Module implements SimpleModule {
     int? paddingIdx,
     ({double maxNorm, double normType})? norm,
   }) {
-    return EmbeddingLayer(
+    final weights = Tensor.empty([numEmbeddings, embedDim]);
+    final layer = EmbeddingLayer(
       name: name,
-      weights: Tensor.empty([numEmbeddings, embedDim]),
+      weights: weights,
       paddingIdx: paddingIdx,
       scaleGradByFreq: scaleGradByFreq,
       sparse: sparse,
       norm: norm,
-    )..resetParameters();
+    );
+    layer.resetParameters();
+    return layer;
   }
 }
 

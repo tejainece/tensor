@@ -47,17 +47,17 @@ class _TestCase {
     final input = await loader.loadByName('$name.input', device: device);
 
     final padding = SymmetricPadding2D.fromPytorchString(
-      loader.header.metadata['$name.padding']!,
+      loader.metadata['$name.padding']!,
     );
     final stride = SymmetricPadding2D.fromPytorchString(
-      loader.header.metadata['$name.stride']!,
+      loader.metadata['$name.stride']!,
     );
     final dilation = SymmetricPadding2D.fromPytorchString(
-      loader.header.metadata['$name.dilation']!,
+      loader.metadata['$name.dilation']!,
     );
-    final groups = int.parse(loader.header.metadata['$name.groups']!);
+    final groups = int.parse(loader.metadata['$name.groups']!);
     PadMode? paddingMode = PadMode.tryFromPytorchString(
-      loader.header.metadata['$name.padding_mode'],
+      loader.metadata['$name.padding_mode'],
     );
     if (paddingMode == PadMode.constant) {
       paddingMode = null;

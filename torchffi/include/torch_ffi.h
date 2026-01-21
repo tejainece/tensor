@@ -84,36 +84,38 @@ extern int64_t torchffi_xpu_memory_allocated(int deviceIndex);
 
 extern int64_t torchffi_xpu_memory_reserved(int deviceIndex);
 
-extern tensor torchffi_tensor_new(void);
+extern tensor torchffi_tensor_new(char **error);
 
 extern void torchffi_tensor_delete(tensor t);
 
-extern tensor torchffi_tensor_clone(tensor t, int8_t *memoryFormat);
+extern tensor torchffi_tensor_clone(tensor t, int8_t *memoryFormat,
+                                    char **error);
 
 extern tensor torchffi_tensor_new_empty(int64_t *sizes, size_t ndims,
-                                        TensorOptions options);
+                                        TensorOptions options, char **error);
 
 extern tensor torchffi_tensor_new_zeros(int64_t *sizes, size_t ndims,
-                                        TensorOptions options);
+                                        TensorOptions options, char **error);
 
 extern tensor torchffi_tensor_new_ones(int64_t *sizes, size_t ndims,
-                                       TensorOptions options);
+                                       TensorOptions options, char **error);
 
 extern tensor torchffi_tensor_new_arange(Scalar *start, Scalar *end,
-                                         Scalar *step, TensorOptions options);
+                                         Scalar *step, TensorOptions options,
+                                         char **error);
 
 extern tensor torchffi_tensor_new_rand(int64_t *sizes, size_t ndims,
                                        Generator generator,
-                                       TensorOptions options);
+                                       TensorOptions options, char **error);
 
 extern tensor torchffi_tensor_new_randn(int64_t *sizes, size_t ndims,
                                         Generator generator,
-                                        TensorOptions options);
+                                        TensorOptions options, char **error);
 
 extern tensor torchffi_tensor_new_randint(int64_t low, int64_t high,
                                           int64_t *sizes, size_t ndims,
                                           Generator generator,
-                                          TensorOptions options);
+                                          TensorOptions options, char **error);
 
 extern void *torchffi_tensor_data_pointer(tensor t);
 
@@ -124,11 +126,11 @@ extern void torchffi_tensor_sizes(tensor t, size_t dim, int64_t *shape);
 extern Device torchffi_tensor_device(tensor t);
 
 extern tensor torchffi_tensor_new_eye(int64_t n, int64_t m,
-                                      TensorOptions options);
+                                      TensorOptions options, char **error);
 
 extern tensor torchffi_tensor_new_from_blob(void *data, int64_t *dims,
-                                            size_t ndims,
-                                            TensorOptions options);
+                                            size_t ndims, TensorOptions options,
+                                            char **error);
 
 extern Scalar_t torchffi_tensor_scalar(tensor t);
 

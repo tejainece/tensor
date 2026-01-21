@@ -76,84 +76,144 @@ extern "C" {
 
 void torchffi_tensor_delete(tensor t) { delete t; }
 
-tensor torchffi_tensor_new() { return new torch::Tensor(); }
-
-tensor torchffi_tensor_clone(tensor t, int8_t *memoryFormat) {
-  std::optional<at::MemoryFormat> format = std::nullopt;
-  if (memoryFormat != nullptr) {
-    format = at::MemoryFormat(*memoryFormat);
+tensor torchffi_tensor_new(char **error) {
+  try {
+    return new torch::Tensor();
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
   }
-  at::Tensor tensor = t->clone(format);
-  return new torch::Tensor(tensor);
+}
+
+tensor torchffi_tensor_clone(tensor t, int8_t *memoryFormat, char **error) {
+  try {
+    std::optional<at::MemoryFormat> format = std::nullopt;
+    if (memoryFormat != nullptr) {
+      format = at::MemoryFormat(*memoryFormat);
+    }
+    at::Tensor tensor = t->clone(format);
+    return new torch::Tensor(tensor);
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
+  }
 }
 
 tensor torchffi_tensor_new_empty(int64_t *sizes, size_t ndims,
-                                 TensorOptions options) {
-  at::Tensor tensor = at::empty(at::IntArrayRef(sizes, ndims),
-                                torchffi_make_tensor_options(options));
-  return new torch::Tensor(tensor);
+                                 TensorOptions options, char **error) {
+  try {
+    at::Tensor tensor = at::empty(at::IntArrayRef(sizes, ndims),
+                                  torchffi_make_tensor_options(options));
+    return new torch::Tensor(tensor);
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
+  }
 }
 
 tensor torchffi_tensor_new_zeros(int64_t *sizes, size_t ndims,
-                                 TensorOptions options) {
-  at::Tensor tensor = at::zeros(at::IntArrayRef(sizes, ndims),
-                                torchffi_make_tensor_options(options));
-  return new torch::Tensor(tensor);
+                                 TensorOptions options, char **error) {
+  try {
+    at::Tensor tensor = at::zeros(at::IntArrayRef(sizes, ndims),
+                                  torchffi_make_tensor_options(options));
+    return new torch::Tensor(tensor);
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
+  }
 }
 
 tensor torchffi_tensor_new_ones(int64_t *sizes, size_t ndims,
-                                TensorOptions options) {
-  at::Tensor tensor = at::ones(at::IntArrayRef(sizes, ndims),
-                               torchffi_make_tensor_options(options));
-  return new torch::Tensor(tensor);
+                                TensorOptions options, char **error) {
+  try {
+    at::Tensor tensor = at::ones(at::IntArrayRef(sizes, ndims),
+                                 torchffi_make_tensor_options(options));
+    return new torch::Tensor(tensor);
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
+  }
 }
 
 tensor torchffi_tensor_new_arange(Scalar *start, Scalar *end, Scalar *step,
-                                  TensorOptions options) {
-  at::Tensor tensor = at::arange(
-      torchffi_to_scalar(*start), torchffi_to_scalar(*end),
-      torchffi_to_scalar(*step), torchffi_make_tensor_options(options));
-  return new torch::Tensor(tensor);
+                                  TensorOptions options, char **error) {
+  try {
+    at::Tensor tensor = at::arange(
+        torchffi_to_scalar(*start), torchffi_to_scalar(*end),
+        torchffi_to_scalar(*step), torchffi_make_tensor_options(options));
+    return new torch::Tensor(tensor);
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
+  }
 }
 
 tensor torchffi_tensor_new_rand(int64_t *sizes, size_t ndims,
-                                Generator generator, TensorOptions options) {
-  at::Tensor tensor = at::rand(
-      at::IntArrayRef(sizes, ndims),
-      generator ? std::optional<at::Generator>(*generator) : std::nullopt,
-      torchffi_make_tensor_options(options));
-  return new torch::Tensor(tensor);
+                                Generator generator, TensorOptions options,
+                                char **error) {
+  try {
+    at::Tensor tensor = at::rand(
+        at::IntArrayRef(sizes, ndims),
+        generator ? std::optional<at::Generator>(*generator) : std::nullopt,
+        torchffi_make_tensor_options(options));
+    return new torch::Tensor(tensor);
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
+  }
 }
 
 tensor torchffi_tensor_new_randn(int64_t *sizes, size_t ndims,
-                                 Generator generator, TensorOptions options) {
-  at::Tensor tensor = at::randn(
-      at::IntArrayRef(sizes, ndims),
-      generator ? std::optional<at::Generator>(*generator) : std::nullopt,
-      torchffi_make_tensor_options(options));
-  return new torch::Tensor(tensor);
+                                 Generator generator, TensorOptions options,
+                                 char **error) {
+  try {
+    at::Tensor tensor = at::randn(
+        at::IntArrayRef(sizes, ndims),
+        generator ? std::optional<at::Generator>(*generator) : std::nullopt,
+        torchffi_make_tensor_options(options));
+    return new torch::Tensor(tensor);
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
+  }
 }
 
 tensor torchffi_tensor_new_randint(int64_t low, int64_t high, int64_t *sizes,
                                    size_t ndims, Generator generator,
-                                   TensorOptions options) {
-  at::Tensor tensor = at::randint(
-      low, high, at::IntArrayRef(sizes, ndims),
-      generator ? std::optional<at::Generator>(*generator) : std::nullopt,
-      torchffi_make_tensor_options(options));
-  return new torch::Tensor(tensor);
+                                   TensorOptions options, char **error) {
+  try {
+    at::Tensor tensor = at::randint(
+        low, high, at::IntArrayRef(sizes, ndims),
+        generator ? std::optional<at::Generator>(*generator) : std::nullopt,
+        torchffi_make_tensor_options(options));
+    return new torch::Tensor(tensor);
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
+  }
 }
 
-tensor torchffi_tensor_new_eye(int64_t n, int64_t m, TensorOptions options) {
-  at::Tensor tensor = at::eye(n, m, torchffi_make_tensor_options(options));
-  return new torch::Tensor(tensor);
+tensor torchffi_tensor_new_eye(int64_t n, int64_t m, TensorOptions options,
+                               char **error) {
+  try {
+    at::Tensor tensor = at::eye(n, m, torchffi_make_tensor_options(options));
+    return new torch::Tensor(tensor);
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
+  }
 }
 
 tensor torchffi_tensor_new_from_blob(void *data, int64_t *dims, size_t ndims,
-                                     TensorOptions options) {
-  at::Tensor tensor = at::from_blob(data, torch::IntArrayRef(dims, ndims),
-                                    torchffi_make_tensor_options(options));
-  return new torch::Tensor(tensor);
+                                     TensorOptions options, char **error) {
+  try {
+    at::Tensor tensor = at::from_blob(data, torch::IntArrayRef(dims, ndims),
+                                      torchffi_make_tensor_options(options));
+    return new torch::Tensor(tensor);
+  } catch (const std::exception &e) {
+    *error = strdup(e.what());
+    return nullptr;
+  }
 }
 
 tensor torchffi_tensor_baddbmm(tensor input, tensor batch1, tensor batch2,

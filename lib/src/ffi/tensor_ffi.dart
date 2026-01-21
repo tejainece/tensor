@@ -76,9 +76,10 @@ final class FFIIndex extends Struct {
 
 abstract class FFITensor {
   static final constructor = nativeLib
-      .lookupFunction<CTensor Function(), CTensor Function()>(
-        'torchffi_tensor_new',
-      );
+      .lookupFunction<
+        CTensor Function(Pointer<Pointer<Utf8>>),
+        CTensor Function(Pointer<Pointer<Utf8>>)
+      >('torchffi_tensor_new');
 
   static final delete = nativeLib
       .lookup<NativeFunction<Void Function(Pointer<Void>)>>(
@@ -91,20 +92,50 @@ abstract class FFITensor {
 
   static final empty = nativeLib
       .lookupFunction<
-        CTensor Function(Pointer<Int64>, Size, CTensorOptions),
-        CTensor Function(Pointer<Int64>, int dims, CTensorOptions)
+        CTensor Function(
+          Pointer<Int64>,
+          Size,
+          CTensorOptions,
+          Pointer<Pointer<Utf8>>,
+        ),
+        CTensor Function(
+          Pointer<Int64>,
+          int dims,
+          CTensorOptions,
+          Pointer<Pointer<Utf8>>,
+        )
       >('torchffi_tensor_new_empty');
 
   static final zeros = nativeLib
       .lookupFunction<
-        CTensor Function(Pointer<Int64>, Size, CTensorOptions),
-        CTensor Function(Pointer<Int64>, int dims, CTensorOptions)
+        CTensor Function(
+          Pointer<Int64>,
+          Size,
+          CTensorOptions,
+          Pointer<Pointer<Utf8>>,
+        ),
+        CTensor Function(
+          Pointer<Int64>,
+          int dims,
+          CTensorOptions,
+          Pointer<Pointer<Utf8>>,
+        )
       >('torchffi_tensor_new_zeros');
 
   static final ones = nativeLib
       .lookupFunction<
-        CTensor Function(Pointer<Int64>, Size, CTensorOptions),
-        CTensor Function(Pointer<Int64>, int dims, CTensorOptions)
+        CTensor Function(
+          Pointer<Int64>,
+          Size,
+          CTensorOptions,
+          Pointer<Pointer<Utf8>>,
+        ),
+        CTensor Function(
+          Pointer<Int64>,
+          int dims,
+          CTensorOptions,
+          Pointer<Pointer<Utf8>>,
+        )
       >('torchffi_tensor_new_ones');
 
   static final arange = nativeLib
@@ -114,25 +145,51 @@ abstract class FFITensor {
           Pointer<CScalar>,
           Pointer<CScalar>,
           CTensorOptions,
+          Pointer<Pointer<Utf8>>,
         ),
         CTensor Function(
           Pointer<CScalar> start,
           Pointer<CScalar> end,
           Pointer<CScalar> step,
           CTensorOptions,
+          Pointer<Pointer<Utf8>>,
         )
       >('torchffi_tensor_new_arange');
 
   static final rand = nativeLib
       .lookupFunction<
-        CTensor Function(Pointer<Int64>, Size, CGenerator, CTensorOptions),
-        CTensor Function(Pointer<Int64>, int dims, CGenerator, CTensorOptions)
+        CTensor Function(
+          Pointer<Int64>,
+          Size,
+          CGenerator,
+          CTensorOptions,
+          Pointer<Pointer<Utf8>>,
+        ),
+        CTensor Function(
+          Pointer<Int64>,
+          int dims,
+          CGenerator,
+          CTensorOptions,
+          Pointer<Pointer<Utf8>>,
+        )
       >('torchffi_tensor_new_rand');
 
   static final randn = nativeLib
       .lookupFunction<
-        CTensor Function(Pointer<Int64>, Size, CGenerator, CTensorOptions),
-        CTensor Function(Pointer<Int64>, int dims, CGenerator, CTensorOptions)
+        CTensor Function(
+          Pointer<Int64>,
+          Size,
+          CGenerator,
+          CTensorOptions,
+          Pointer<Pointer<Utf8>>,
+        ),
+        CTensor Function(
+          Pointer<Int64>,
+          int dims,
+          CGenerator,
+          CTensorOptions,
+          Pointer<Pointer<Utf8>>,
+        )
       >('torchffi_tensor_new_randn');
 
   static final randint = nativeLib
@@ -144,6 +201,7 @@ abstract class FFITensor {
           Size,
           CGenerator,
           CTensorOptions,
+          Pointer<Pointer<Utf8>>,
         ),
         CTensor Function(
           int low,
@@ -152,13 +210,19 @@ abstract class FFITensor {
           int dims,
           CGenerator,
           CTensorOptions,
+          Pointer<Pointer<Utf8>>,
         )
       >('torchffi_tensor_new_randint');
 
   static final eye = nativeLib
       .lookupFunction<
-        CTensor Function(Int64, Int64, CTensorOptions),
-        CTensor Function(int n, int m, CTensorOptions options)
+        CTensor Function(Int64, Int64, CTensorOptions, Pointer<Pointer<Utf8>>),
+        CTensor Function(
+          int n,
+          int m,
+          CTensorOptions options,
+          Pointer<Pointer<Utf8>>,
+        )
       >('torchffi_tensor_new_eye');
 
   static final fromBlob = nativeLib
@@ -168,12 +232,14 @@ abstract class FFITensor {
           Pointer<Int64>,
           Size dims,
           CTensorOptions,
+          Pointer<Pointer<Utf8>>,
         ),
         CTensor Function(
           Pointer<Void>,
           Pointer<Int64>,
           int dims,
           CTensorOptions,
+          Pointer<Pointer<Utf8>>,
         )
       >('torchffi_tensor_new_from_blob');
 
@@ -184,9 +250,10 @@ abstract class FFITensor {
       >('torchffi_tensor_data_pointer');
 
   static final ones_ = nativeLib
-      .lookupFunction<Void Function(CTensor), void Function(CTensor)>(
-        'torchffi_tensor_ones_',
-      );
+      .lookupFunction<
+        Void Function(CTensor, Pointer<Pointer<Utf8>>),
+        void Function(CTensor, Pointer<Pointer<Utf8>>)
+      >('torchffi_tensor_ones_');
 
   static final zeros_ = nativeLib
       .lookupFunction<Void Function(CTensor), void Function(CTensor)>(
@@ -430,8 +497,12 @@ abstract class FFITensor {
 
   static final clone = nativeLib
       .lookupFunction<
-        CTensor Function(CTensor, Pointer<Int8>),
-        CTensor Function(CTensor tensor, Pointer<Int8> memoryFormat)
+        CTensor Function(CTensor, Pointer<Int8>, Pointer<Pointer<Utf8>>),
+        CTensor Function(
+          CTensor tensor,
+          Pointer<Int8> memoryFormat,
+          Pointer<Pointer<Utf8>>,
+        )
       >('torchffi_tensor_clone');
 
   static final pow = nativeLib
@@ -1096,4 +1167,10 @@ abstract class FFINN2D {
           Pointer<Int64> divisorOverride,
         )
       >('torchffi_avg_pool2d');
+}
+
+Exception makeCException(Pointer<Pointer<Utf8>> errPtr) {
+  final message = errPtr.value.toDartString();
+  malloc.free(errPtr.value);
+  return Exception(message);
 }

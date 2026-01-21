@@ -3,11 +3,78 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 import 'package:tensor/tensor.dart';
+import 'package:universal_io/io.dart';
+
+class CompositeSafeTensorLoader extends SafeTensorLoader {
+  final List<SafeTensorLoader> _loaders;
+
+  CompositeSafeTensorLoader(Iterable<SafeTensorLoader> loaders)
+    : _loaders = loaders.toList();
+
+  @override
+  late final Map<String, String> metadata = _loaders
+      .map((e) => e.metadata)
+      .reduce((a, b) => a..addAll(b));
+
+  @override
+  late final Map<String, SafeTensorInfo> tensorInfos = _loaders
+      .map((e) => e.tensorInfos)
+      .reduce((a, b) => a..addAll(b));
+
+  @override
+  Future<Tensor> loadByName(String name, {Device device = Device.cpu}) async {
+    for (final loader in _loaders) {
+      final tensor = await loader.tryLoadByName(name, device: device);
+      if (tensor != null) return tensor;
+    }
+    throw Exception('Tensor $name not found');
+  }
+
+  @override
+  Future<Tensor?> tryLoadByName(
+    String name, {
+    Device device = Device.cpu,
+  }) async {
+    for (final loader in _loaders) {
+      final tensor = await loader.tryLoadByName(name, device: device);
+      if (tensor != null) return tensor;
+    }
+    return null;
+  }
+
+  static Future<CompositeSafeTensorLoader> loadSplitSafeTensors(
+    Directory baseDir, {
+    String prefix = 'model',
+  }) async {
+    final files = (await baseDir.list().toList())
+        .whereType<File>()
+        .where(
+          (e) =>
+              e.uri.pathSegments.last.startsWith(prefix) &&
+              e.path.endsWith('.safetensors'),
+        )
+        .toList();
+    final loaders = <SafeTensorLoader>[];
+    for (final file in files) {
+      final loader = await SafeTensorsFile.load(file.path);
+      final mmapLoader = loader.mmapTensorLoader();
+      loaders.add(mmapLoader);
+    }
+    return CompositeSafeTensorLoader(loaders);
+  }
+
+  @override
+  Future<void> release() async {
+    for (final loader in _loaders) {
+      await loader.release();
+    }
+  }
+}
 
 abstract class SafeTensorLoader {
-  SafeTensorHeader get header;
+  Map<String, String> get metadata;
 
-  Map<String, SafeTensorInfo> get tensorInfos => header.tensorInfos;
+  Map<String, SafeTensorInfo> get tensorInfos;
 
   bool hasTensor(String name) => tensorInfos.containsKey(name);
 
@@ -21,13 +88,19 @@ abstract class SafeTensorLoader {
   FutureOr<Tensor> loadByName(String name, {Device device = Device.cpu});
 
   FutureOr<Tensor?> tryLoadByName(String name, {Device device = Device.cpu});
+
+  Future<void> release();
 }
 
 class FileIOSafeTensorLoader extends SafeTensorLoader {
-  @override
   final SafeTensorHeader header;
-
   FileIOSafeTensorLoader({required this.header});
+
+  @override
+  Map<String, String> get metadata => header.metadata;
+
+  @override
+  Map<String, SafeTensorInfo> get tensorInfos => header.tensorInfos;
 
   @override
   Tensor loadByName(String name, {Device device = Device.cpu}) {
@@ -40,13 +113,17 @@ class FileIOSafeTensorLoader extends SafeTensorLoader {
     // TODO
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> release() async {
+    // TODO
+    throw UnimplementedError();
+  }
 }
 
 /// Loads tensor using mmap.
 /// Achieves Zero copy tensor loading.
 class MmapSafeTensorLoader extends SafeTensorLoader {
-  @override
-  final SafeTensorHeader header;
   final int fd;
   final int mmapedLength;
   final Pointer<Uint8> _pointer;
@@ -58,9 +135,17 @@ class MmapSafeTensorLoader extends SafeTensorLoader {
     required Pointer<Uint8> pointer,
   }) : _pointer = pointer;
 
+  final SafeTensorHeader header;
+
+  @override
+  Map<String, String> get metadata => header.metadata;
+
+  @override
+  Map<String, SafeTensorInfo> get tensorInfos => header.tensorInfos;
+
   @override
   Tensor? tryLoadByName(String name, {Device device = Device.cpu}) {
-    final info = header.tensorInfos[name];
+    final info = tensorInfos[name];
     if (info == null) return null;
 
     final datatype = DataType.fromSafeTensorName(info.dtype);
@@ -93,7 +178,8 @@ class MmapSafeTensorLoader extends SafeTensorLoader {
     return tensor;
   }
 
-  void release() {
+  @override
+  Future<void> release() async {
     munmap(_pointer, mmapedLength);
     close(fd);
   }
@@ -152,10 +238,15 @@ class MmapSafeTensorLoader extends SafeTensorLoader {
 /// This can only be used for Nvidia cards that have GDS support.
 /// This achieves true Zero copy tensor loading.
 class CudaGDSSafeTensorLoader extends SafeTensorLoader {
-  @override
   final SafeTensorHeader header;
 
   CudaGDSSafeTensorLoader({required this.header});
+
+  @override
+  Map<String, String> get metadata => header.metadata;
+
+  @override
+  Map<String, SafeTensorInfo> get tensorInfos => header.tensorInfos;
 
   @override
   Tensor loadByName(String name, {Device device = Device.cpu}) {
@@ -165,6 +256,12 @@ class CudaGDSSafeTensorLoader extends SafeTensorLoader {
 
   @override
   Tensor? tryLoadByName(String name, {Device device = Device.cpu}) {
+    // TODO
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> release() async {
     // TODO
     throw UnimplementedError();
   }
