@@ -1,13 +1,14 @@
 import 'dart:ffi' as ffi;
 import 'package:collection/collection.dart';
 import 'package:ffi/ffi.dart' as ffi;
+import 'package:tensor/src/tensor/graph.dart';
 import 'package:tensor/tensor.dart';
 import 'package:tensor/src/ffi/torch_ffi.dart';
 
 export 'finfo.dart';
 export 'nn.dart';
 
-class Tensor implements ffi.Finalizable {
+class Tensor implements ffi.Finalizable, TensorGraph {
   ffi.Pointer<ffi.Void> nativePtr;
   final bool shouldDelete;
 
